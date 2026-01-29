@@ -25,6 +25,14 @@ OpenCode 是一个强大的 AI 编程助手 CLI 工具，支持多种 AI 提供�
 │  └─────────────────────────────────────────────────────────────────────┘   │
 │                                                                             │
 │  ┌─────────────────────────────────────────────────────────────────────┐   │
+│  │                         开发与 SDK                                  │   │
+│  │  ┌─────────────┐ ┌─────────────┐ ┌─────────────┐                   │   │
+│  │  │ 开发指南    │ │ SDK 文档    │ │ 模块说明    │                   │   │
+│  │  │ 09-dev      │ │ 10-sdk      │ │ 11-packages │                   │   │
+│  │  └─────────────┘ └─────────────┘ └─────────────┘                   │   │
+│  └─────────────────────────────────────────────────────────────────────┘   │
+│                                                                             │
+│  ┌─────────────────────────────────────────────────────────────────────┐   │
 │  │                         实践指南                                     │   │
 │  │  ┌───────────────────────────────────────────────────────────────┐ │   │
 │  │  │ 定制化指南 (08-customization-guide)                            │ │   │
@@ -48,6 +56,9 @@ OpenCode 是一个强大的 AI 编程助手 CLI 工具，支持多种 AI 提供�
 | [06-MCP 集成](./06-mcp-integration/) | MCP 配置、服务器开发 | MCP 开发者 |
 | [07-提供商系统](./07-provider-system/) | 多提供商支持、模型配置 | 运维人员 |
 | [08-定制化指南](./08-customization-guide/) | 构建智能体、多智能体系统 | 所有开发者 |
+| [09-开发指南](./09-development-guide/) | 开发环境、调试、Server 模式 | 贡献者 |
+| [10-SDK](./10-sdk/) | SDK 使用、客户端/服务端 API | SDK 用户 |
+| [11-模块说明](./11-packages-overview/) | App、Web、Desktop、Console | 架构了解 |
 
 ## 快速开始
 
@@ -253,6 +264,11 @@ const MyPlugin: Plugin = async (input) => ({
 | 插件 | `packages/opencode/src/plugin/` | 插件系统 |
 | MCP | `packages/opencode/src/mcp/` | MCP 集成 |
 | 提供商 | `packages/opencode/src/provider/` | AI 提供商 |
+| Server | `packages/opencode/src/server/` | API 服务器 |
+| SDK | `packages/sdk/js/src/` | JavaScript SDK |
+| App | `packages/app/src/` | Web UI 组件 |
+| Desktop | `packages/desktop/` | 桌面应用 |
+| Console | `packages/console/` | 管理控制台 |
 
 ## 学习路径
 
@@ -279,6 +295,18 @@ const MyPlugin: Plugin = async (input) => ({
 1. 理解 [代理系统](./03-agent-system/) 基础
 2. 学习 [多代理协作模式](./03-agent-system/multi-agent-patterns.md)
 3. 参考 [多智能体系统](./08-customization-guide/multi-agent-system.md) 实践
+
+### SDK 开发者
+
+1. 阅读 [SDK 概述](./10-sdk/) 了解 SDK 结构
+2. 学习 [客户端 SDK](./10-sdk/client-sdk.md) API
+3. 参考 [服务端 SDK](./10-sdk/server-sdk.md) 集成方式
+
+### 贡献者
+
+1. 阅读 [开发环境搭建](./09-development-guide/) 配置环境
+2. 学习 [调试运行指南](./09-development-guide/debugging.md)
+3. 了解 [模块说明](./11-packages-overview/) 理解架构
 
 ## 贡献指南
 
