@@ -146,3 +146,4 @@ Server 模式默认使用 4096 端口，如被占用会自动尝试其他端口�
 
 - [调试运行指南](./debugging.md) - 了解如何调试 OpenCode
 - [Server 模式详解](./server-mode.md) - 了解 Server 模式的使用
+- [运行入口文件索引](./entrypoints.md) - 快速定位调试入口
