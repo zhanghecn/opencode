@@ -212,6 +212,28 @@
         "vite": "catalog:",
       },
     },
+    "packages/doc-demo": {
+      "name": "@opencode-ai/doc-demo",
+      "version": "0.1.0",
+      "dependencies": {
+        "@kobalte/core": "catalog:",
+        "@opencode-ai/sdk": "workspace:*",
+        "@opencode-ai/ui": "workspace:*",
+        "@opencode-ai/util": "workspace:*",
+        "@solid-primitives/event-bus": "1.1.2",
+        "@solid-primitives/storage": "catalog:",
+        "@solidjs/meta": "catalog:",
+        "@solidjs/router": "catalog:",
+        "solid-js": "catalog:",
+      },
+      "devDependencies": {
+        "@tailwindcss/vite": "catalog:",
+        "@types/node": "catalog:",
+        "typescript": "catalog:",
+        "vite": "catalog:",
+        "vite-plugin-solid": "catalog:",
+      },
+    },
     "packages/enterprise": {
       "name": "@opencode-ai/enterprise",
       "version": "1.1.53",
@@ -1231,6 +1253,8 @@
     "@opencode-ai/console-resource": ["@opencode-ai/console-resource@workspace:packages/console/resource"],
 
     "@opencode-ai/desktop": ["@opencode-ai/desktop@workspace:packages/desktop"],
+
+    "@opencode-ai/doc-demo": ["@opencode-ai/doc-demo@workspace:packages/doc-demo"],
 
     "@opencode-ai/enterprise": ["@opencode-ai/enterprise@workspace:packages/enterprise"],
 

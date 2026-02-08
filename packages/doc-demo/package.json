@@ -1,0 +1,28 @@
+{
+  "name": "@opencode-ai/doc-demo",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@opencode-ai/sdk": "workspace:*",
+    "@opencode-ai/ui": "workspace:*",
+    "@opencode-ai/util": "workspace:*",
+    "@kobalte/core": "catalog:",
+    "@solid-primitives/event-bus": "1.1.2",
+    "@solid-primitives/storage": "catalog:",
+    "@solidjs/meta": "catalog:",
+    "@solidjs/router": "catalog:",
+    "solid-js": "catalog:"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "catalog:",
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vite-plugin-solid": "catalog:"
+  }
+}
