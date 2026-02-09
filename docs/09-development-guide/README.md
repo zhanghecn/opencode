@@ -146,4 +146,8 @@ Server 模式默认使用 4096 端口，如被占用会自动尝试其他端口�
 
 - [调试运行指南](./debugging.md) - 了解如何调试 OpenCode
 - [Server 模式详解](./server-mode.md) - 了解 Server 模式的使用
+- [Serve 路由工作流](./serve-route-flow.md) - 从命令入口到 API/页面返回的完整链路
+- [Bun.serve 从零理解](./bun-serve-from-zero.md) - 用 Request/Response 视角理解 fetch 绑定
+- [Hono 从零理解](./hono-from-zero.md) - 中间件、路由、Context 与执行顺序
+- [OpenCode 请求生命周期](./opencode-serve-request-lifecycle.md) - 从 CLI 到 API/页面响应的完整执行路径
 - [运行入口文件索引](./entrypoints.md) - 快速定位调试入口
