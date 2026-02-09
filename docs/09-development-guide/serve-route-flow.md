@@ -89,12 +89,12 @@ client.project.current()
 因此：
 
 - `GET /doc` -> 本地 OpenAPI JSON（API 文档）
-- `GET /docs` -> 没有本地 API 匹配，进入 fallback proxy，返回网页 HTML
+- `GET /docs` -> 本地 Swagger UI 页面（会读取 `/doc` 作为规范源）
 
 ## 5) 快速判断某个路径是 API 还是页面
 
 1. 先看是否在 `/doc` 的 `paths` 里
-2. 不在的话，基本会被 fallback 代理成页面资源
+2. 不在的话，通常会被 fallback 代理成页面资源（`/docs` 是本地文档 UI 例外）
 3. 响应头也能辅助判断：
    - `application/json` 常见于 API
    - `text/html` 多数是页面资源
@@ -111,7 +111,7 @@ curl -s http://127.0.0.1:43111/global/health
 # 3) API 文档（OpenAPI JSON）
 curl -s http://127.0.0.1:43111/doc
 
-# 4) 注意：/docs 通常会返回页面 HTML（fallback 代理）
+# 4) `/docs` 返回本地可视化文档页（Swagger UI）
 curl -i http://127.0.0.1:43111/docs
 ```
 

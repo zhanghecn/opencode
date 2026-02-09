@@ -83,7 +83,7 @@
 所以：
 
 - `/doc`：本地 OpenAPI JSON
-- `/docs`：常常是网页 HTML（走 fallback）
+- `/docs`：本地 Swagger UI 页面（读取 `/doc` 规范）
 
 ## 6) 三个真实请求演练
 
@@ -101,9 +101,9 @@
 
 ### 案例 C：`GET /docs`
 
-- 本地无 `/docs` API
-- 落入 `.all("/*")` fallback
-- 代理到 `app.opencode.ai/docs`，因此返回 HTML
+- 命中本地 `/docs` 路由
+- 返回 Swagger UI HTML 页面
+- 页面再去请求 `/doc` 获取 OpenAPI JSON
 
 ## 7) SDK 是怎么“用到路由”的
 
