@@ -228,7 +228,11 @@ async function resolveTools(input: {
 ```typescript
 // 文件: packages/opencode/src/session/prompt.ts
 
-async function insertReminders(input: { messages: MessageV2.WithParts[]; agent: Agent.Info; session: Session.Info }) {
+async function insertReminders(input: {
+  messages: MessageV2.WithParts[]
+  agent: Agent.Info
+  session: Session.Info
+}) {
   // 计划模式提醒
   if (agent.name === "plan") {
     userMessage.parts.push({
@@ -292,6 +296,5 @@ export async function command(input: CommandInput) {
 ```
 
 ## 下一步
-
 - [LLM 交互机制](./llm-interaction.md)
 - [工具系统详解](../02-tool-system/README.md)

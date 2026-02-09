@@ -7,25 +7,22 @@
 
 export namespace Agent {
   export const Info = z.object({
-    name: z.string(), // 代理名称
-    description: z.string().optional(), // 代理描述
-    mode: z.enum(["subagent", "primary", "all"]), // 运行模式
-    native: z.boolean().optional(), // 是否内置代理
-    hidden: z.boolean().optional(), // 是否隐藏
-    topP: z.number().optional(), // Top-P 采样参数
-    temperature: z.number().optional(), // 温度参数
-    color: z.string().optional(), // UI 显示颜色
-    permission: PermissionNext.Ruleset, // 权限规则集
-    model: z
-      .object({
-        // 可选的指定模型
-        modelID: z.string(),
-        providerID: z.string(),
-      })
-      .optional(),
-    prompt: z.string().optional(), // 系统提示词
-    options: z.record(z.string(), z.any()), // 额外选项
-    steps: z.number().int().positive().optional(), // 最大步数
+    name: z.string(),                    // 代理名称
+    description: z.string().optional(),  // 代理描述
+    mode: z.enum(["subagent", "primary", "all"]),  // 运行模式
+    native: z.boolean().optional(),      // 是否内置代理
+    hidden: z.boolean().optional(),      // 是否隐藏
+    topP: z.number().optional(),         // Top-P 采样参数
+    temperature: z.number().optional(),  // 温度参数
+    color: z.string().optional(),        // UI 显示颜色
+    permission: PermissionNext.Ruleset,  // 权限规则集
+    model: z.object({                    // 可选的指定模型
+      modelID: z.string(),
+      providerID: z.string(),
+    }).optional(),
+    prompt: z.string().optional(),       // 系统提示词
+    options: z.record(z.string(), z.any()),  // 额外选项
+    steps: z.number().int().positive().optional(),  // 最大步数
   })
 }
 ```
@@ -52,7 +49,6 @@ build: {
 ```
 
 **特点**:
-
 - 默认主代理，用户直接交互
 - 拥有完整的工具访问权限
 - 可以进入规划模式
@@ -82,7 +78,6 @@ plan: {
 ```
 
 **特点**:
-
 - 只读模式，禁止编辑代码
 - 只能编辑计划文件 (.md)
 - 用于任务规划和设计
@@ -107,7 +102,6 @@ general: {
 ```
 
 **特点**:
-
 - 通用子代理，被主代理调用
 - 用于执行复杂的多步骤任务
 - 不能操作任务列表 (避免干扰主代理)
@@ -140,14 +134,12 @@ explore: {
 ```
 
 **特点**:
-
 - 专门用于代码探索
 - 只有只读权限
 - 有专门的系统提示词
 - 支持不同的探索深度级别
 
 **Explore 代理提示词**:
-
 ```
 You are a file search specialist. You excel at thoroughly navigating
 and exploring codebases.
@@ -186,7 +178,6 @@ compaction: {
 ```
 
 **特点**:
-
 - 隐藏代理，系统内部使用
 - 用于压缩长对话上下文
 - 没有工具访问权限
@@ -212,7 +203,6 @@ title: {
 ```
 
 **特点**:
-
 - 隐藏代理，自动生成会话标题
 - 使用较高温度增加多样性
 - 没有工具访问权限
@@ -237,7 +227,6 @@ summary: {
 ```
 
 **特点**:
-
 - 隐藏代理，生成会话摘要
 - 用于上下文压缩后的摘要
 - 没有工具访问权限
@@ -248,40 +237,40 @@ summary: {
 
 ```typescript
 const defaults = PermissionNext.fromConfig({
-  "*": "allow", // 默认允许所有
-  doom_loop: "ask", // 循环检测需要确认
+  "*": "allow",                    // 默认允许所有
+  doom_loop: "ask",                // 循环检测需要确认
   external_directory: {
-    "*": "ask", // 外部目录需要确认
-    [Truncate.DIR]: "allow", // 截断目录允许
+    "*": "ask",                    // 外部目录需要确认
+    [Truncate.DIR]: "allow",       // 截断目录允许
   },
-  question: "deny", // 默认禁止提问
-  plan_enter: "deny", // 默认禁止进入规划
-  plan_exit: "deny", // 默认禁止退出规划
+  question: "deny",                // 默认禁止提问
+  plan_enter: "deny",              // 默认禁止进入规划
+  plan_exit: "deny",               // 默认禁止退出规划
   read: {
-    "*": "allow", // 允许读取所有文件
-    "*.env": "ask", // .env 文件需要确认
-    "*.env.*": "ask", // .env.* 文件需要确认
-    "*.env.example": "allow", // .env.example 允许
+    "*": "allow",                  // 允许读取所有文件
+    "*.env": "ask",                // .env 文件需要确认
+    "*.env.*": "ask",              // .env.* 文件需要确认
+    "*.env.example": "allow",      // .env.example 允许
   },
 })
 ```
 
 ### 权限动作
 
-| 动作    | 说明         |
-| ------- | ------------ |
-| `allow` | 自动允许     |
-| `deny`  | 自动拒绝     |
-| `ask`   | 需要用户确认 |
+| 动作 | 说明 |
+|------|------|
+| `allow` | 自动允许 |
+| `deny` | 自动拒绝 |
+| `ask` | 需要用户确认 |
 
 ### 权限合并
 
 ```typescript
 // 权限按优先级合并: defaults < user < agent-specific
 permission: PermissionNext.merge(
-  defaults, // 系统默认
-  user, // 用户配置
-  agentConfig, // 代理特定配置
+  defaults,     // 系统默认
+  user,         // 用户配置
+  agentConfig,  // 代理特定配置
 )
 ```
 
@@ -324,6 +313,5 @@ permission: PermissionNext.merge(
 ```
 
 ## 下一步
-
 - [自定义代理指南](./custom-agent-guide.md)
 - [多代理协作模式](./multi-agent-patterns.md)

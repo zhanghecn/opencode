@@ -24,7 +24,6 @@ event?: (input: { event: Event }) => Promise<void>
 **用途**: 监听会话、消息、工具执行等事件
 
 **示例**:
-
 ```typescript
 {
   event: async ({ event }) => {
@@ -44,7 +43,6 @@ config?: (input: Config) => Promise<void>
 **用途**: 读取或修改配置
 
 **示例**:
-
 ```typescript
 {
   config: async (config) => {
@@ -75,7 +73,6 @@ config?: (input: Config) => Promise<void>
 **用途**: 修改用户消息或添加额外内容
 
 **示例**:
-
 ```typescript
 {
   "chat.message": async (input, output) => {
@@ -113,7 +110,6 @@ config?: (input: Config) => Promise<void>
 **用途**: 动态调整 LLM 参数
 
 **示例**:
-
 ```typescript
 {
   "chat.params": async (input, output) => {
@@ -145,7 +141,6 @@ config?: (input: Config) => Promise<void>
 **用途**: 添加自定义请求头
 
 **示例**:
-
 ```typescript
 {
   "chat.headers": async (input, output) => {
@@ -170,7 +165,6 @@ config?: (input: Config) => Promise<void>
 **用途**: 自动处理权限请求
 
 **示例**:
-
 ```typescript
 {
   "permission.ask": async (input, output) => {
@@ -202,7 +196,6 @@ config?: (input: Config) => Promise<void>
 **用途**: 在命令执行前添加内容
 
 **示例**:
-
 ```typescript
 {
   "command.execute.before": async (input, output) => {
@@ -236,7 +229,6 @@ config?: (input: Config) => Promise<void>
 **用途**: 修改工具参数
 
 **示例**:
-
 ```typescript
 {
   "tool.execute.before": async (input, output) => {
@@ -270,7 +262,6 @@ config?: (input: Config) => Promise<void>
 **用途**: 修改工具输出
 
 **示例**:
-
 ```typescript
 {
   "tool.execute.after": async (input, output) => {
@@ -316,7 +307,6 @@ config?: (input: Config) => Promise<void>
 **用途**: 修改或添加系统提示词
 
 **示例**:
-
 ```typescript
 {
   "experimental.chat.system.transform": async (input, output) => {
@@ -372,7 +362,6 @@ auth?: {
 **用途**: 为 AI 提供商添加认证支持
 
 **示例**:
-
 ```typescript
 {
   auth: {
@@ -413,7 +402,6 @@ tool?: {
 **用途**: 添加自定义工具
 
 **示例**:
-
 ```typescript
 {
   tool: {
@@ -459,6 +447,5 @@ tool?: {
 ```
 
 ## 下一步
-
 - [插件开发指南](./plugin-development.md)
 - [MCP 集成](../06-mcp-integration/README.md)

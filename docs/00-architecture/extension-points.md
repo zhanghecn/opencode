@@ -48,7 +48,6 @@ OpenCode 提供了多种扩展机制，允许用户自定义和扩展系统功�
 技能是最简单的扩展方式，通过 Markdown 文件定义。
 
 ### 技能文件位置
-
 ```
 ~/.claude/skills/my-skill/SKILL.md          # 全局技能
 .claude/skills/my-skill/SKILL.md            # 项目技能
@@ -56,7 +55,6 @@ OpenCode 提供了多种扩展机制，允许用户自定义和扩展系统功�
 ```
 
 ### 技能文件格式
-
 ```markdown
 ---
 name: my-skill
@@ -69,7 +67,6 @@ description: 技能描述
 ```
 
 ### 技能调用
-
 ```
 /my-skill                    # 用户调用
 Skill tool: my-skill         # 代理调用
@@ -84,14 +81,12 @@ Skill tool: my-skill         # 代理调用
 命令是用户可以直接调用的快捷操作。
 
 ### 内置命令
-
 - `/commit` - 提交代码
 - `/review` - 代码审查
 - `/help` - 帮助信息
 - `/clear` - 清除会话
 
 ### 自定义命令
-
 通过 MCP 提示词或技能实现自定义命令。
 
 详见: [命令系统文档](../05-plugin-system/README.md)
@@ -103,7 +98,6 @@ Skill tool: my-skill         # 代理调用
 插件提供更强大的扩展能力，包括钩子函数和自定义工具。
 
 ### 插件接口
-
 ```typescript
 // packages/plugin/src/index.ts
 export interface Hooks {
@@ -127,11 +121,13 @@ export interface Hooks {
 ```
 
 ### 插件配置
-
 ```json
 // opencode.json
 {
-  "plugin": ["my-plugin@1.0.0", "file://./my-local-plugin"]
+  "plugin": [
+    "my-plugin@1.0.0",
+    "file://./my-local-plugin"
+  ]
 }
 ```
 
@@ -144,7 +140,6 @@ export interface Hooks {
 MCP (Model Context Protocol) 允许集成外部工具和资源。
 
 ### MCP 配置
-
 ```json
 // opencode.json
 {
@@ -162,7 +157,6 @@ MCP (Model Context Protocol) 允许集成外部工具和资源。
 ```
 
 ### MCP 功能
-
 - **工具**: 外部工具调用
 - **资源**: 外部数据访问
 - **提示词**: 预定义提示模板
@@ -176,7 +170,6 @@ MCP (Model Context Protocol) 允许集成外部工具和资源。
 通过代码定义新工具。
 
 ### 工具定义
-
 ```typescript
 // .opencode/tool/my-tool.ts
 import { z } from "zod"
@@ -194,7 +187,6 @@ export default {
 ```
 
 ### 工具位置
-
 ```
 .opencode/tool/my-tool.ts       # 项目工具
 .opencode/tools/my-tool.ts      # 项目工具 (复数)
@@ -210,17 +202,15 @@ export default {
 代理定义了 AI 的行为模式和权限。
 
 ### 内置代理类型
-
-| 代理         | 用途       | 权限         |
-| ------------ | ---------- | ------------ |
-| `build`      | 代码构建   | 完整工具访问 |
-| `plan`       | 任务规划   | 只读工具     |
-| `explore`    | 代码探索   | 只读工具     |
-| `general`    | 通用任务   | 完整工具访问 |
-| `compaction` | 上下文压缩 | 无工具       |
+| 代理 | 用途 | 权限 |
+|------|------|------|
+| `build` | 代码构建 | 完整工具访问 |
+| `plan` | 任务规划 | 只读工具 |
+| `explore` | 代码探索 | 只读工具 |
+| `general` | 通用任务 | 完整工具访问 |
+| `compaction` | 上下文压缩 | 无工具 |
 
 ### 自定义代理
-
 ```json
 // opencode.json
 {
@@ -243,7 +233,6 @@ export default {
 添加新的 AI 提供商支持。
 
 ### 配置新提供商
-
 ```json
 // opencode.json
 {
@@ -273,20 +262,19 @@ export default {
 
 ## 扩展点对比
 
-| 扩展点      | 难度     | 功能范围   | 适用场景           |
-| ----------- | -------- | ---------- | ------------------ |
-| Skill       | ⭐       | 提示词增强 | 工作流程、最佳实践 |
-| Command     | ⭐       | 快捷操作   | 常用操作封装       |
-| CLAUDE.md   | ⭐       | 项目指令   | 项目特定规则       |
-| Config      | ⭐⭐     | 配置调整   | 模型、代理配置     |
-| Plugin      | ⭐⭐⭐   | 钩子、工具 | 深度集成           |
-| MCP         | ⭐⭐⭐   | 外部工具   | 第三方服务集成     |
-| Custom Tool | ⭐⭐⭐   | 新工具     | 特定功能实现       |
-| Agent       | ⭐⭐⭐⭐ | 行为模式   | 专业化代理         |
-| Provider    | ⭐⭐⭐⭐ | AI 提供商  | 新模型支持         |
+| 扩展点 | 难度 | 功能范围 | 适用场景 |
+|--------|------|----------|----------|
+| Skill | ⭐ | 提示词增强 | 工作流程、最佳实践 |
+| Command | ⭐ | 快捷操作 | 常用操作封装 |
+| CLAUDE.md | ⭐ | 项目指令 | 项目特定规则 |
+| Config | ⭐⭐ | 配置调整 | 模型、代理配置 |
+| Plugin | ⭐⭐⭐ | 钩子、工具 | 深度集成 |
+| MCP | ⭐⭐⭐ | 外部工具 | 第三方服务集成 |
+| Custom Tool | ⭐⭐⭐ | 新工具 | 特定功能实现 |
+| Agent | ⭐⭐⭐⭐ | 行为模式 | 专业化代理 |
+| Provider | ⭐⭐⭐⭐ | AI 提供商 | 新模型支持 |
 
 ## 下一步
-
 - [会话系统详解](../01-session-system/README.md)
 - [工具系统详解](../02-tool-system/README.md)
 - [定制化指南](../08-customization-guide/build-your-agent.md)

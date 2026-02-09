@@ -74,7 +74,6 @@ interface Session.Info {
 ## 会话操作
 
 ### 获取会话
-
 ```typescript
 // 获取单个会话
 const session = await Session.get(sessionID)
@@ -87,7 +86,6 @@ const recent = await Session.recent()
 ```
 
 ### 更新会话
-
 ```typescript
 // 更新会话属性
 await Session.update(sessionID, (draft) => {
@@ -99,7 +97,6 @@ await Session.touch(sessionID)
 ```
 
 ### 删除会话
-
 ```typescript
 // 删除单个会话
 await Session.remove(sessionID)
@@ -111,7 +108,6 @@ await Session.clear()
 ## 消息管理
 
 ### 添加消息
-
 ```typescript
 // 更新/创建消息
 await Session.updateMessage({
@@ -133,7 +129,6 @@ await Session.updatePart({
 ```
 
 ### 获取消息
-
 ```typescript
 // 流式获取消息
 for await (const message of MessageV2.stream(sessionID)) {
@@ -141,7 +136,9 @@ for await (const message of MessageV2.stream(sessionID)) {
 }
 
 // 过滤已压缩的消息
-const messages = await MessageV2.filterCompacted(MessageV2.stream(sessionID))
+const messages = await MessageV2.filterCompacted(
+  MessageV2.stream(sessionID)
+)
 ```
 
 ## 退出条件
@@ -195,6 +192,5 @@ const childSession = await Session.create({
 ```
 
 ## 下一步
-
 - [消息处理流程](./message-processing.md)
 - [LLM 交互机制](./llm-interaction.md)

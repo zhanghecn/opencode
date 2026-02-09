@@ -72,7 +72,11 @@ function AppRouter() {
   const server = useServer()
 
   return (
-    <Router root={(routerProps) => <SimplifiedLayout>{routerProps.children}</SimplifiedLayout>}>
+    <Router
+      root={(routerProps) => (
+        <SimplifiedLayout>{routerProps.children}</SimplifiedLayout>
+      )}
+    >
       <Route path="/" component={() => <Navigate href="/session" />} />
       <Route
         path="/session/:id?"

@@ -31,7 +31,7 @@ export default {
     // 工具逻辑
     const result = `处理: ${args.input}`
 
-    return result // 返回字符串
+    return result  // 返回字符串
   },
 }
 ```
@@ -40,8 +40,8 @@ export default {
 
 ```typescript
 interface ToolContext {
-  directory: string // 项目目录
-  worktree: string // Git 工作树根目录
+  directory: string    // 项目目录
+  worktree: string     // Git 工作树根目录
   // ... 其他属性
 }
 ```
@@ -67,15 +67,11 @@ export default {
     const stats = await fs.stat(targetPath)
 
     if (stats.isFile()) {
-      return JSON.stringify(
-        {
-          type: "file",
-          size: stats.size,
-          modified: stats.mtime.toISOString(),
-        },
-        null,
-        2,
-      )
+      return JSON.stringify({
+        type: "file",
+        size: stats.size,
+        modified: stats.mtime.toISOString(),
+      }, null, 2)
     }
 
     if (stats.isDirectory()) {
@@ -92,15 +88,11 @@ export default {
         }
       }
 
-      return JSON.stringify(
-        {
-          type: "directory",
-          fileCount,
-          totalSize,
-        },
-        null,
-        2,
-      )
+      return JSON.stringify({
+        type: "directory",
+        fileCount,
+        totalSize,
+      }, null, 2)
     }
 
     return "Unknown file type"
@@ -254,7 +246,6 @@ export const formatter = {
 ## 最佳实践
 
 ### 1. 参数验证
-
 ```typescript
 args: {
   // 使用 describe() 提供清晰的参数说明
@@ -269,7 +260,6 @@ args: {
 ```
 
 ### 2. 错误处理
-
 ```typescript
 async execute(args, ctx) {
   try {
@@ -283,7 +273,6 @@ async execute(args, ctx) {
 ```
 
 ### 3. 输出格式
-
 ```typescript
 async execute(args, ctx) {
   const data = await fetchData(args)
@@ -298,7 +287,6 @@ async execute(args, ctx) {
 ```
 
 ### 4. 安全考虑
-
 ```typescript
 async execute(args, ctx) {
   // 验证路径在项目内
@@ -312,6 +300,5 @@ async execute(args, ctx) {
 ```
 
 ## 下一步
-
 - [代理系统详解](../03-agent-system/README.md)
 - [插件系统详解](../05-plugin-system/README.md)

@@ -13,38 +13,41 @@ export namespace Tool {
 
   // 初始化上下文
   export interface InitContext {
-    agent?: Agent.Info // 当前代理信息
+    agent?: Agent.Info  // 当前代理信息
   }
 
   // 执行上下文
   export type Context<M extends Metadata = Metadata> = {
-    sessionID: string // 会话 ID
-    messageID: string // 消息 ID
-    agent: string // 代理名称
-    abort: AbortSignal // 取消信号
-    callID?: string // 工具调用 ID
-    extra?: { [key: string]: any } // 额外数据
+    sessionID: string           // 会话 ID
+    messageID: string           // 消息 ID
+    agent: string               // 代理名称
+    abort: AbortSignal          // 取消信号
+    callID?: string             // 工具调用 ID
+    extra?: { [key: string]: any }  // 额外数据
     messages: MessageV2.WithParts[] // 消息历史
-    metadata(input: { title?: string; metadata?: M }): void // 更新元数据
-    ask(input: PermissionRequest): Promise<void> // 请求权限
+    metadata(input: { title?: string; metadata?: M }): void  // 更新元数据
+    ask(input: PermissionRequest): Promise<void>  // 请求权限
   }
 
   // 工具信息接口
-  export interface Info<Parameters extends z.ZodType = z.ZodType, M extends Metadata = Metadata> {
-    id: string // 工具唯一标识
+  export interface Info<
+    Parameters extends z.ZodType = z.ZodType,
+    M extends Metadata = Metadata
+  > {
+    id: string  // 工具唯一标识
     init: (ctx?: InitContext) => Promise<{
-      description: string // 工具描述
-      parameters: Parameters // 参数 schema
+      description: string       // 工具描述
+      parameters: Parameters    // 参数 schema
       execute(
         args: z.infer<Parameters>,
-        ctx: Context,
+        ctx: Context
       ): Promise<{
-        title: string // 结果标题
-        metadata: M // 结果元数据
-        output: string // 输出内容
-        attachments?: MessageV2.FilePart[] // 附件
+        title: string           // 结果标题
+        metadata: M             // 结果元数据
+        output: string          // 输出内容
+        attachments?: MessageV2.FilePart[]  // 附件
       }>
-      formatValidationError?(error: z.ZodError): string // 自定义错误格式
+      formatValidationError?(error: z.ZodError): string  // 自定义错误格式
     }>
   }
 }
@@ -56,7 +59,7 @@ export namespace Tool {
 // 使用 Tool.define() 定义工具
 export function define<Parameters extends z.ZodType, Result extends Metadata>(
   id: string,
-  init: Info<Parameters, Result>["init"] | Awaited<ReturnType<Info<Parameters, Result>["init"]>>,
+  init: Info<Parameters, Result>["init"] | Awaited<ReturnType<Info<Parameters, Result>["init"]>>
 ): Info<Parameters, Result> {
   return {
     id,
@@ -74,7 +77,10 @@ export function define<Parameters extends z.ZodType, Result extends Metadata>(
           if (error instanceof z.ZodError && toolInfo.formatValidationError) {
             throw new Error(toolInfo.formatValidationError(error), { cause: error })
           }
-          throw new Error(`The ${id} tool was called with invalid arguments: ${error}`, { cause: error })
+          throw new Error(
+            `The ${id} tool was called with invalid arguments: ${error}`,
+            { cause: error }
+          )
         }
 
         // 2. 执行工具
@@ -240,12 +246,10 @@ const parameters = z.object({
   items: z.array(z.string()).describe("项目列表"),
 
   // 嵌套对象
-  config: z
-    .object({
-      enabled: z.boolean(),
-      value: z.number(),
-    })
-    .optional(),
+  config: z.object({
+    enabled: z.boolean(),
+    value: z.number(),
+  }).optional(),
 })
 ```
 
@@ -253,17 +257,15 @@ const parameters = z.object({
 
 ```typescript
 interface ToolResult {
-  title: string // 显示在 UI 中的标题
-  metadata: {
-    // 元数据 (显示在 UI 中)
+  title: string           // 显示在 UI 中的标题
+  metadata: {             // 元数据 (显示在 UI 中)
     [key: string]: any
   }
-  output: string // 返回给 LLM 的输出
+  output: string          // 返回给 LLM 的输出
   attachments?: FilePart[] // 可选的文件附件
 }
 ```
 
 ## 下一步
-
 - [内置工具分析](./builtin-tools.md)
 - [自定义工具指南](./custom-tool-guide.md)

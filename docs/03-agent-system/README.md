@@ -51,35 +51,34 @@
 
 ## 关键文件
 
-| 文件                 | 职责           |
-| -------------------- | -------------- |
-| `agent/agent.ts`     | 代理定义和管理 |
+| 文件 | 职责 |
+|------|------|
+| `agent/agent.ts` | 代理定义和管理 |
 | `agent/prompt/*.txt` | 代理系统提示词 |
-| `permission/next.ts` | 权限系统       |
-| `config/config.ts`   | 代理配置加载   |
+| `permission/next.ts` | 权限系统 |
+| `config/config.ts` | 代理配置加载 |
 
 ## 代理模式
 
-| 模式       | 说明   | 使用场景                   |
-| ---------- | ------ | -------------------------- |
-| `primary`  | 主代理 | 用户直接交互的代理         |
+| 模式 | 说明 | 使用场景 |
+|------|------|----------|
+| `primary` | 主代理 | 用户直接交互的代理 |
 | `subagent` | 子代理 | 被其他代理调用执行特定任务 |
-| `all`      | 通用   | 可作为主代理或子代理使用   |
+| `all` | 通用 | 可作为主代理或子代理使用 |
 
 ## 内置代理列表
 
-| 代理         | 模式             | 用途                       |
-| ------------ | ---------------- | -------------------------- |
-| `build`      | primary          | 默认代理，执行各种任务     |
-| `plan`       | primary          | 规划模式，禁用编辑工具     |
-| `general`    | subagent         | 通用子代理，执行多步骤任务 |
-| `explore`    | subagent         | 代码探索专家               |
-| `compaction` | primary (hidden) | 上下文压缩                 |
-| `title`      | primary (hidden) | 生成会话标题               |
-| `summary`    | primary (hidden) | 生成会话摘要               |
+| 代理 | 模式 | 用途 |
+|------|------|------|
+| `build` | primary | 默认代理，执行各种任务 |
+| `plan` | primary | 规划模式，禁用编辑工具 |
+| `general` | subagent | 通用子代理，执行多步骤任务 |
+| `explore` | subagent | 代码探索专家 |
+| `compaction` | primary (hidden) | 上下文压缩 |
+| `title` | primary (hidden) | 生成会话标题 |
+| `summary` | primary (hidden) | 生成会话摘要 |
 
 ## 下一步
-
 - [代理类型详解](./agent-types.md)
 - [自定义代理指南](./custom-agent-guide.md)
 - [多代理协作模式](./multi-agent-patterns.md)

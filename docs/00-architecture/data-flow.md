@@ -223,6 +223,5 @@ interface ToolResult {
 ```
 
 ## 下一步
-
 - [扩展点总览](./extension-points.md)
 - [会话系统详解](../01-session-system/README.md)

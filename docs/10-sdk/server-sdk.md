@@ -11,7 +11,7 @@ import { createOpencodeServer } from "@opencode-ai/sdk"
 
 const server = await createOpencodeServer({
   port: 4096,
-  hostname: "127.0.0.1",
+  hostname: "127.0.0.1"
 })
 
 console.log(`Server running at ${server.url}`)
@@ -24,11 +24,11 @@ server.close()
 
 ```typescript
 interface ServerOptions {
-  hostname?: string // 监听地址，默认 "127.0.0.1"
-  port?: number // 监听端口，默认 4096
+  hostname?: string    // 监听地址，默认 "127.0.0.1"
+  port?: number        // 监听端口，默认 4096
   signal?: AbortSignal // 用于取消启动
-  timeout?: number // 启动超时 (ms)，默认 5000
-  config?: Config // OpenCode 配置
+  timeout?: number     // 启动超时 (ms)，默认 5000
+  config?: Config      // OpenCode 配置
 }
 ```
 
@@ -45,10 +45,10 @@ const server = await createOpencodeServer({
     agent: {
       "my-agent": {
         name: "My Agent",
-        prompt: "You are a helpful assistant.",
-      },
-    },
-  },
+        prompt: "You are a helpful assistant."
+      }
+    }
+  }
 })
 ```
 
@@ -67,7 +67,7 @@ setTimeout(() => controller.abort(), 5000)
 try {
   const server = await createOpencodeServer({
     port: 4096,
-    signal: controller.signal,
+    signal: controller.signal
   })
 } catch (error) {
   if (error.message === "Aborted") {
@@ -84,7 +84,7 @@ try {
 try {
   const server = await createOpencodeServer({
     port: 4096,
-    timeout: 10000, // 10 秒超时
+    timeout: 10000  // 10 秒超时
   })
 } catch (error) {
   console.error("Server failed to start:", error.message)
@@ -97,8 +97,8 @@ try {
 
 ```typescript
 interface Server {
-  url: string // Server URL，如 "http://127.0.0.1:4096"
-  close(): void // 关闭 Server
+  url: string      // Server URL，如 "http://127.0.0.1:4096"
+  close(): void    // 关闭 Server
 }
 ```
 
@@ -112,8 +112,8 @@ import { createOpencodeTui } from "@opencode-ai/sdk"
 const tui = createOpencodeTui({
   project: "/path/to/project",
   model: "anthropic/claude-sonnet-4-20250514",
-  session: "session-id", // 可选，恢复已有会话
-  agent: "my-agent", // 可选，指定代理
+  session: "session-id",  // 可选，恢复已有会话
+  agent: "my-agent"       // 可选，指定代理
 })
 
 // 关闭 TUI
@@ -124,12 +124,12 @@ tui.close()
 
 ```typescript
 interface TuiOptions {
-  project?: string // 项目目录
-  model?: string // 使用的模型
-  session?: string // 会话 ID
-  agent?: string // 代理 ID
+  project?: string     // 项目目录
+  model?: string       // 使用的模型
+  session?: string     // 会话 ID
+  agent?: string       // 代理 ID
   signal?: AbortSignal // 用于取消
-  config?: Config // OpenCode 配置
+  config?: Config      // OpenCode 配置
 }
 ```
 
@@ -145,8 +145,8 @@ async function main() {
   const { client, server } = await createOpencode({
     port: 4096,
     config: {
-      model: "anthropic/claude-sonnet-4-20250514",
-    },
+      model: "anthropic/claude-sonnet-4-20250514"
+    }
   })
 
   try {
@@ -155,12 +155,13 @@ async function main() {
 
     // 发送消息
     await client.session.chat(session.id, {
-      content: "Hello!",
+      content: "Hello!"
     })
 
     // 获取消息
     const messages = await client.message.list(session.id)
     console.log("Messages:", messages)
+
   } finally {
     // 关闭 Server
     server.close()
@@ -233,8 +234,8 @@ main().catch(console.error)
 const proc = spawn("opencode", ["serve", `--port=${port}`], {
   env: {
     ...process.env,
-    OPENCODE_CONFIG_CONTENT: JSON.stringify(config),
-  },
+    OPENCODE_CONFIG_CONTENT: JSON.stringify(config)
+  }
 })
 
 // 等待 Server 启动
@@ -244,7 +245,7 @@ return {
   url,
   close() {
     proc.kill()
-  },
+  }
 }
 ```
 

@@ -24,7 +24,7 @@ export default function SessionPage() {
       baseUrl: globalSDK.url,
       directory: directory(),
       throwOnError: true,
-    }),
+    })
   )
 
   const [store, setStore] = globalSync.child(directory())
@@ -68,21 +68,14 @@ export default function SessionPage() {
     try {
       const response = await sdk().session.messages({ sessionID, limit: 100 })
       const items = response.data ?? []
-
-      setStore(
-        "message",
-        sessionID,
-        items
-          .map((x) => x.info)
-          .filter((m) => !!m?.id)
-          .sort((a, b) => (a.id < b.id ? -1 : 1)),
+      
+      setStore("message", sessionID, 
+        items.map(x => x.info).filter(m => !!m?.id).sort((a, b) => a.id < b.id ? -1 : 1)
       )
-
+      
       for (const item of items) {
-        setStore(
-          "part",
-          item.info.id,
-          item.parts.filter((p) => !!p?.id).sort((a, b) => (a.id < b.id ? -1 : 1)),
+        setStore("part", item.info.id, 
+          item.parts.filter(p => !!p?.id).sort((a, b) => a.id < b.id ? -1 : 1)
         )
       }
     } catch (e) {
@@ -96,7 +89,7 @@ export default function SessionPage() {
     if (!input || localState.sending) return
 
     let sessionID = localState.currentSessionID
-
+    
     // Create session if needed
     if (!sessionID) {
       await createSession()
@@ -112,7 +105,7 @@ export default function SessionPage() {
       let messageContent = input
       if (processor.state.documents.length > 0) {
         const docContext = processor.state.documents
-          .map((d) => `## Document: ${d.originalName}\n\n${d.markdown}`)
+          .map(d => `## Document: ${d.originalName}\n\n${d.markdown}`)
           .join("\n\n---\n\n")
         messageContent = `${input}\n\n---\n\n### Uploaded Documents:\n\n${docContext}`
       }
@@ -161,14 +154,18 @@ export default function SessionPage() {
 
         <Show when={localState.currentSessionID}>
           <Show when={messages().length === 0}>
-            <div class="text-center text-color-tertiary py-8">No messages yet. Start the conversation!</div>
+            <div class="text-center text-color-tertiary py-8">
+              No messages yet. Start the conversation!
+            </div>
           </Show>
-
+          
           <For each={messages()}>
             {(message) => (
               <div
                 class={`p-4 rounded-lg ${
-                  message.role === "user" ? "bg-background-secondary ml-8" : "bg-background-tertiary mr-8"
+                  message.role === "user"
+                    ? "bg-background-secondary ml-8"
+                    : "bg-background-tertiary mr-8"
                 }`}
               >
                 <div class="text-11-regular text-color-tertiary mb-2">
@@ -215,7 +212,10 @@ export default function SessionPage() {
             rows={3}
             disabled={localState.sending}
           />
-          <Button onClick={sendMessage} disabled={localState.sending || !localState.input.trim()}>
+          <Button
+            onClick={sendMessage}
+            disabled={localState.sending || !localState.input.trim()}
+          >
             {localState.sending ? "Sending..." : "Send"}
           </Button>
         </div>

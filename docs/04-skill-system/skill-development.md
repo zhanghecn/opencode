@@ -54,27 +54,23 @@ description: Use this when reviewing code changes, pull requests, or performing 
 ## Review Checklist
 
 ### 1. Code Quality
-
 - [ ] Code is readable and well-organized
 - [ ] Functions are small and focused
 - [ ] Variable names are descriptive
 - [ ] No code duplication
 
 ### 2. Security
-
 - [ ] No hardcoded credentials
 - [ ] Input validation present
 - [ ] SQL injection prevention
 - [ ] XSS prevention
 
 ### 3. Performance
-
 - [ ] No unnecessary loops
 - [ ] Efficient data structures
 - [ ] Proper caching where needed
 
 ### 4. Testing
-
 - [ ] Unit tests present
 - [ ] Edge cases covered
 - [ ] Test coverage adequate
@@ -84,21 +80,17 @@ description: Use this when reviewing code changes, pull requests, or performing 
 Provide review in this format:
 
 ## Summary
-
 Brief overview of the code quality
 
 ## Issues Found
-
 - [SEVERITY] Description
   - Location: file:line
   - Suggestion: How to fix
 
 ## Recommendations
-
 - Improvement suggestions
 
 ## Approved/Changes Requested
-
 Final verdict
 ```
 
@@ -149,7 +141,6 @@ description: Use this when performing git operations like commits, branches, mer
 
 ### Commit Message Format
 ```
-
 <type>(<scope>): <subject>
 
 <body>
@@ -158,7 +149,6 @@ description: Use this when performing git operations like commits, branches, mer
 ```
 
 ### Types
-
 - `feat`: New feature
 - `fix`: Bug fix
 - `docs`: Documentation
@@ -176,18 +166,15 @@ description: Use this when performing git operations like commits, branches, mer
 ## Workflow Steps
 
 ### Creating a Feature Branch
-
 1. `git checkout main`
 2. `git pull origin main`
 3. `git checkout -b feature/my-feature`
 
 ### Committing Changes
-
 1. `git add -p` (review changes)
 2. `git commit -m "type(scope): message"`
 
 ### Creating Pull Request
-
 1. `git push -u origin feature/my-feature`
 2. Create PR with description
 3. Request review
@@ -199,8 +186,7 @@ description: Use this when performing git operations like commits, branches, mer
 3. Resolve conflicts in each file
 4. `git add <resolved-files>`
 5. `git rebase --continue`
-
-````
+```
 
 ### API 开发技能
 
@@ -215,15 +201,13 @@ description: Use this when creating or modifying REST API endpoints, handling re
 ## Endpoint Design
 
 ### URL Structure
-````
-
-GET /api/v1/resources # List
-GET /api/v1/resources/:id # Get one
-POST /api/v1/resources # Create
-PUT /api/v1/resources/:id # Update
-DELETE /api/v1/resources/:id # Delete
-
-````
+```
+GET    /api/v1/resources          # List
+GET    /api/v1/resources/:id      # Get one
+POST   /api/v1/resources          # Create
+PUT    /api/v1/resources/:id      # Update
+DELETE /api/v1/resources/:id      # Delete
+```
 
 ### Response Format
 ```json
@@ -235,10 +219,9 @@ DELETE /api/v1/resources/:id # Delete
     "total": 100
   }
 }
-````
+```
 
 ### Error Format
-
 ```json
 {
   "success": false,
@@ -269,8 +252,7 @@ DELETE /api/v1/resources/:id # Delete
 - Test error cases
 - Test edge cases
 - Test authentication/authorization
-
-````
+```
 
 ## 技能设计最佳实践
 
@@ -281,10 +263,9 @@ DELETE /api/v1/resources/:id # Delete
 name: my-skill
 description: Use this when [specific scenario]. It provides [specific value].
 ---
-````
+```
 
 描述应该：
-
 - 明确说明使用场景
 - 帮助 LLM 判断何时调用
 - 简洁但信息完整
@@ -295,25 +276,20 @@ description: Use this when [specific scenario]. It provides [specific value].
 # 技能标题
 
 ## 使用场景
-
 何时使用此技能
 
 ## 前置条件
-
 使用前需要满足的条件
 
 ## 步骤
-
 1. 第一步
 2. 第二步
 3. 第三步
 
 ## 示例
-
 具体的使用示例
 
 ## 注意事项
-
 需要注意的问题
 ```
 
@@ -323,19 +299,16 @@ description: Use this when [specific scenario]. It provides [specific value].
 ## 步骤
 
 ### 1. 分析需求
-
 - 确定输入和输出
 - 识别边界条件
 - 列出依赖项
 
 ### 2. 实现
-
 - 创建必要的文件
 - 编写核心逻辑
 - 添加错误处理
 
 ### 3. 验证
-
 - 运行测试
 - 检查边界条件
 - 验证输出格式
@@ -426,6 +399,5 @@ description: Use this for comprehensive code analysis
    - 改进描述，使其更具体
 
 ## 下一步
-
 - [插件系统详解](../05-plugin-system/README.md)
 - [MCP 集成](../06-mcp-integration/README.md)

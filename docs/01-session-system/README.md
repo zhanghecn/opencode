@@ -30,40 +30,34 @@
 
 ## 关键文件
 
-| 文件                     | 职责                       |
-| ------------------------ | -------------------------- |
-| `session/index.ts`       | 会话 CRUD 操作、消息存储   |
-| `session/prompt.ts`      | 提示处理、主循环、命令执行 |
-| `session/processor.ts`   | 消息处理器、工具调用处理   |
-| `session/llm.ts`         | LLM 交互、流式处理         |
-| `session/message-v2.ts`  | 消息数据结构定义           |
-| `session/compaction.ts`  | 上下文压缩、摘要生成       |
-| `session/system.ts`      | 系统提示词构建             |
-| `session/instruction.ts` | 指令提示词加载             |
+| 文件 | 职责 |
+|------|------|
+| `session/index.ts` | 会话 CRUD 操作、消息存储 |
+| `session/prompt.ts` | 提示处理、主循环、命令执行 |
+| `session/processor.ts` | 消息处理器、工具调用处理 |
+| `session/llm.ts` | LLM 交互、流式处理 |
+| `session/message-v2.ts` | 消息数据结构定义 |
+| `session/compaction.ts` | 上下文压缩、摘要生成 |
+| `session/system.ts` | 系统提示词构建 |
+| `session/instruction.ts` | 指令提示词加载 |
 
 ## 核心概念
 
 ### 1. 会话 (Session)
-
 会话是用户与 AI 交互的容器，包含：
-
 - 会话 ID 和标题
 - 消息历史
 - 代理配置
 - 权限设置
 
 ### 2. 消息 (Message)
-
 消息是会话中的基本单元，分为：
-
 - **用户消息** (User): 用户输入
 - **助手消息** (Assistant): AI 响应
 - **系统消息** (System): 系统指令
 
 ### 3. 消息部件 (Part)
-
 消息由多个部件组成：
-
 - **文本部件** (TextPart): 纯文本内容
 - **文件部件** (FilePart): 文件附件
 - **工具部件** (ToolPart): 工具调用和结果
@@ -71,15 +65,12 @@
 - **子任务部件** (SubtaskPart): 子代理任务
 
 ### 4. 上下文压缩 (Compaction)
-
 当消息历史过长时，自动压缩上下文：
-
 - 生成摘要替换旧消息
 - 保留最近的消息
 - 维护上下文连贯性
 
 ## 下一步
-
 - [会话生命周期](./session-lifecycle.md)
 - [消息处理流程](./message-processing.md)
 - [LLM 交互机制](./llm-interaction.md)

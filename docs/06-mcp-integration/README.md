@@ -41,12 +41,12 @@ MCP (Model Context Protocol) 是一个开放协议，允许 AI 应用与外部�
 
 ## 关键文件
 
-| 文件                    | 职责             |
-| ----------------------- | ---------------- |
-| `mcp/index.ts`          | MCP 客户端管理   |
+| 文件 | 职责 |
+|------|------|
+| `mcp/index.ts` | MCP 客户端管理 |
 | `mcp/oauth-provider.ts` | OAuth 认证提供者 |
-| `mcp/oauth-callback.ts` | OAuth 回调处理   |
-| `mcp/auth.ts`           | MCP 认证存储     |
+| `mcp/oauth-callback.ts` | OAuth 回调处理 |
+| `mcp/auth.ts` | MCP 认证存储 |
 
 ## MCP 配置
 
@@ -119,16 +119,16 @@ MCP (Model Context Protocol) 是一个开放协议，允许 AI 应用与外部�
 
 ## 配置选项
 
-| 选项          | 类型                    | 说明               |
-| ------------- | ----------------------- | ------------------ |
-| `type`        | `"local"` \| `"remote"` | 服务器类型         |
-| `command`     | `string[]`              | 本地服务器启动命令 |
-| `url`         | `string`                | 远程服务器 URL     |
-| `environment` | `object`                | 环境变量 (本地)    |
-| `headers`     | `object`                | HTTP 请求头 (远程) |
-| `timeout`     | `number`                | 超时时间 (毫秒)    |
-| `enabled`     | `boolean`               | 是否启用           |
-| `oauth`       | `object` \| `false`     | OAuth 配置         |
+| 选项 | 类型 | 说明 |
+|------|------|------|
+| `type` | `"local"` \| `"remote"` | 服务器类型 |
+| `command` | `string[]` | 本地服务器启动命令 |
+| `url` | `string` | 远程服务器 URL |
+| `environment` | `object` | 环境变量 (本地) |
+| `headers` | `object` | HTTP 请求头 (远程) |
+| `timeout` | `number` | 超时时间 (毫秒) |
+| `enabled` | `boolean` | 是否启用 |
+| `oauth` | `object` \| `false` | OAuth 配置 |
 
 ## MCP 连接流程
 
@@ -175,12 +175,12 @@ MCP (Model Context Protocol) 是一个开放协议，允许 AI 应用与外部�
 
 ## MCP 状态
 
-| 状态                        | 说明           |
-| --------------------------- | -------------- |
-| `connected`                 | 已连接         |
-| `disabled`                  | 已禁用         |
-| `failed`                    | 连接失败       |
-| `needs_auth`                | 需要认证       |
+| 状态 | 说明 |
+|------|------|
+| `connected` | 已连接 |
+| `disabled` | 已禁用 |
+| `failed` | 连接失败 |
+| `needs_auth` | 需要认证 |
 | `needs_client_registration` | 需要客户端注册 |
 
 ## OAuth 认证流程
@@ -386,6 +386,5 @@ server.setRequestHandler("tools/call", async (request) => {
 ```
 
 ## 下一步
-
 - [提供商系统](../07-provider-system/README.md)
 - [定制化指南](../08-customization-guide/build-your-agent.md)

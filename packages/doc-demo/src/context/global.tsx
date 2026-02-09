@@ -17,7 +17,7 @@ export const { use: useGlobalSDK, provider: GlobalSDKProvider } = createSimpleCo
       baseUrl: server.url,
       signal: abort.signal,
     })
-
+    
     const emitter = createGlobalEmitter<{
       [key: string]: Event
     }>()
@@ -44,9 +44,9 @@ export const { use: useGlobalSDK, provider: GlobalSDKProvider } = createSimpleCo
       throwOnError: true,
     })
 
-    return {
-      url: server.url,
-      client: sdk,
+    return { 
+      url: server.url, 
+      client: sdk, 
       event: emitter,
     }
   },
@@ -111,7 +111,7 @@ function createGlobalSync() {
         todo: {},
       })
       directoryStores.set(directory, store)
-
+      
       // Bootstrap directory
       bootstrapDirectory(directory, store[1])
     }
@@ -136,10 +136,9 @@ function createGlobalSync() {
       batch(() => {
         setStore("path", pathRes.data)
         setStore("agent", agentRes.data ?? [])
-        setStore(
-          "session",
-          (sessionRes.data ?? []).sort((a: any, b: any) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0)),
-        )
+        setStore("session", (sessionRes.data ?? []).sort((a: any, b: any) => 
+          a.id < b.id ? -1 : a.id > b.id ? 1 : 0
+        ))
         setStore("status", "ready")
       })
     } catch (e) {
@@ -182,17 +181,14 @@ function createGlobalSync() {
     if (!store) return
 
     const [, setStore] = store
-
+    
     // Handle directory events
     if (event.type === "session.created") {
-      setStore(
-        "session",
-        produce((draft: any[]) => {
-          const session = event.properties.session
-          draft.push(session)
-          draft.sort((a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0))
-        }),
-      )
+      setStore("session", produce((draft: any[]) => {
+        const session = event.properties.session
+        draft.push(session)
+        draft.sort((a, b) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0)
+      }))
     }
   })
 
@@ -227,12 +223,11 @@ function createGlobalSync() {
           throwOnError: true,
         })
         const sessions = await sdk.session.list({ limit: store.limit })
-        setStore(
-          "session",
-          (sessions.data ?? []).sort((a: any, b: any) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0)),
-        )
-      },
-    },
+        setStore("session", (sessions.data ?? []).sort((a: any, b: any) => 
+          a.id < b.id ? -1 : a.id > b.id ? 1 : 0
+        ))
+      }
+    }
   }
 }
 

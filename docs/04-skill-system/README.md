@@ -44,10 +44,10 @@
 
 ## 关键文件
 
-| 文件                 | 职责                  |
-| -------------------- | --------------------- |
-| `skill/skill.ts`     | 技能加载和管理        |
-| `tool/skill.ts`      | Skill 工具实现        |
+| 文件 | 职责 |
+|------|------|
+| `skill/skill.ts` | 技能加载和管理 |
+| `tool/skill.ts` | Skill 工具实现 |
 | `config/markdown.ts` | Markdown 前置数据解析 |
 
 ## 技能文件格式
@@ -155,6 +155,5 @@ async execute(params, ctx) {
 ```
 
 ## 下一步
-
 - [技能开发指南](./skill-development.md)
 - [插件系统详解](../05-plugin-system/README.md)

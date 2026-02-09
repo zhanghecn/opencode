@@ -32,12 +32,16 @@ export default function SimplifiedLayout(props: ParentProps) {
         </div>
         <div class="flex items-center gap-2">
           <DocUpload />
-          <span class="text-12-regular text-color-tertiary">{server.directory}</span>
+          <span class="text-12-regular text-color-tertiary">
+            {server.directory}
+          </span>
         </div>
       </header>
 
       {/* Main content area */}
-      <main class="flex-1 overflow-hidden">{props.children}</main>
+      <main class="flex-1 overflow-hidden">
+        {props.children}
+      </main>
     </div>
   )
 }
