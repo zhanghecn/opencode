@@ -6,6 +6,21 @@
       "request": "attach",
       "name": "opencode (attach)",
       "url": "ws://localhost:6499/"
+    },
+    {
+      "name": "opencode serve (browser)",
+      "type": "bun",
+      "request": "launch",
+      "runtime": "${env:HOME}/.bun/bin/bun",
+      "program": "${workspaceFolder}/packages/opencode/src/index.ts",
+      "cwd": "${workspaceFolder}/packages/opencode",
+      "runtimeArgs": ["--conditions=browser"],
+      "args": ["serve"],
+      "env": {
+        "OPENCODE_LOG_LEVEL": "debug"
+      },
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
     }
   ]
 }
