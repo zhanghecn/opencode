@@ -1,13 +1,13 @@
-
-
 我现在需要你参考 opencode web 做个专项 doc-demo 。
 
 # 需求
-用户拖入一个 ppt 或者 pdf  excel docx 或者 图片。
-然后用户一般会问一个生成什么报告或者文档的提示词 
+
+用户拖入一个 ppt 或者 pdf excel docx 或者 图片。
+然后用户一般会问一个生成什么报告或者文档的提示词
 接下来就会生成文档或者报告文件。
 
 # 背景
+
 为什么我要用opencode的通用智能体进行改造专属agent
 
 因为这并不是很简单的任务,大模型上下文有限制。
@@ -18,8 +18,8 @@
 
 并且这只是其中一个业务需求,一个通用型智能体非常重要,因为本身就支持海量代码库的搜索,和批量写入。
 
-opencode 是一个通用智能体。 
-可以方便自定义构建智能体 里面自带拥有一些工具和命令 
+opencode 是一个通用智能体。
+可以方便自定义构建智能体 里面自带拥有一些工具和命令
 并且可以定义 模型 和 agent 。
 还支持 plugin 和 skill 集成
 
@@ -27,24 +27,25 @@ opencode 是一个通用智能体。
 
 sdk 是拥有 server 的。 而且我更多时候也会调试 server 修改源码。 你帮我想个办法,我并知道如何正规的运行这个项目。
 
-
 # 深入了解代码
-opencode 中的 
-sdk core tool plugin skills 
 
-只有了解这些 你才知道如何配置自定义agent 
+opencode 中的
+sdk core tool plugin skills
 
+只有了解这些 你才知道如何配置自定义agent
 
-
-# 实现要求 
+# 实现要求
 
 ## 前端分离
+
 opencode web 是 自动启动一个 server 但我这里不允许,我需要的是前后端分离。
 服务器可以任意跑server。 而我目前实现的 doc-demo 需要您在实现客户端web界面的时候 做到分离的效果。
 在vite 环境配置好 server 地址就能直接启动
 
 ## 关于页面需求
+
 由于是参考 opencode web 那就简单了,做减法就行 以及一些细微改动
+
 1. 保留左边问答框
 2. 保留中间执行流程显示 以及 点击文件的显示
 3. 保留右侧 "所有文件"
@@ -53,23 +54,29 @@ opencode web 是 自动启动一个 server 但我这里不允许,我需要的是
 
 ## agent 自定义配置
 
-### 工作目录 
+### 工作目录
+
 工作目录 需要在 doc-coauthoring 项目中提取预设好 不允许更改工作目录
 
 ### skill 目录
+
 默认指定一个目录作为 加载 skills 的地方 到时候把 doc-coauthoring 的skill copy 这个目录 来优化报告文档的效果
 
 ### agent 默认配置
-在通过 sdk 调用 opencode server 时候配置下面: 
-- 只运行启动服务的目录 进行写入 读取 等权限 
+
+在通过 sdk 调用 opencode server 时候配置下面:
+
+- 只运行启动服务的目录 进行写入 读取 等权限
 - 默认所有写入 读取 执行权限都有,不需要用户确认。 只不过限制在目录中
-- 默认使用的模型和 key 也要提前配置好 
+- 默认使用的模型和 key 也要提前配置好
 - 默认开启max 最大思考模式
 
-### 文档处理 
+### 文档处理
+
 所有 文档建议都提前处理成 markdown,方便检索。
 
 关于 pdf 解析,需要借助到 paddle-v1.5 下面是示例代码:
+
 ```
 # Please make sure the requests library is installed
 # pip install requests
@@ -137,4 +144,3 @@ for i, res in enumerate(result["layoutParsingResults"]):
 ```
 
 它可以 转成 markdown 并能够提取出 图片 。 您需要先将他们自动解析放在文件系统中
-

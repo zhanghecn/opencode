@@ -46,34 +46,34 @@
 
 ## 关键文件
 
-| 文件 | 职责 |
-|------|------|
-| `provider/provider.ts` | 提供商管理和模型加载 |
-| `provider/models.ts` | 模型定义数据 |
-| `provider/transform.ts` | 提供商特定转换 |
-| `auth/index.ts` | 认证管理 |
+| 文件                    | 职责                 |
+| ----------------------- | -------------------- |
+| `provider/provider.ts`  | 提供商管理和模型加载 |
+| `provider/models.ts`    | 模型定义数据         |
+| `provider/transform.ts` | 提供商特定转换       |
+| `auth/index.ts`         | 认证管理             |
 
 ## 支持的提供商
 
-| 提供商 | SDK 包 | 环境变量 |
-|--------|--------|----------|
-| Anthropic | `@ai-sdk/anthropic` | `ANTHROPIC_API_KEY` |
-| OpenAI | `@ai-sdk/openai` | `OPENAI_API_KEY` |
-| Google | `@ai-sdk/google` | `GOOGLE_GENERATIVE_AI_API_KEY` |
-| Azure | `@ai-sdk/azure` | `AZURE_OPENAI_API_KEY` |
-| Amazon Bedrock | `@ai-sdk/amazon-bedrock` | `AWS_ACCESS_KEY_ID` |
-| Google Vertex | `@ai-sdk/google-vertex` | `GOOGLE_CLOUD_PROJECT` |
-| OpenRouter | `@openrouter/ai-sdk-provider` | `OPENROUTER_API_KEY` |
-| Groq | `@ai-sdk/groq` | `GROQ_API_KEY` |
-| Mistral | `@ai-sdk/mistral` | `MISTRAL_API_KEY` |
-| xAI | `@ai-sdk/xai` | `XAI_API_KEY` |
-| GitHub Copilot | 内置 | OAuth |
-| GitLab | `@gitlab/gitlab-ai-provider` | `GITLAB_TOKEN` |
-| Cohere | `@ai-sdk/cohere` | `COHERE_API_KEY` |
-| Cerebras | `@ai-sdk/cerebras` | `CEREBRAS_API_KEY` |
-| DeepInfra | `@ai-sdk/deepinfra` | `DEEPINFRA_API_KEY` |
-| Together AI | `@ai-sdk/togetherai` | `TOGETHER_AI_API_KEY` |
-| Perplexity | `@ai-sdk/perplexity` | `PERPLEXITY_API_KEY` |
+| 提供商         | SDK 包                        | 环境变量                       |
+| -------------- | ----------------------------- | ------------------------------ |
+| Anthropic      | `@ai-sdk/anthropic`           | `ANTHROPIC_API_KEY`            |
+| OpenAI         | `@ai-sdk/openai`              | `OPENAI_API_KEY`               |
+| Google         | `@ai-sdk/google`              | `GOOGLE_GENERATIVE_AI_API_KEY` |
+| Azure          | `@ai-sdk/azure`               | `AZURE_OPENAI_API_KEY`         |
+| Amazon Bedrock | `@ai-sdk/amazon-bedrock`      | `AWS_ACCESS_KEY_ID`            |
+| Google Vertex  | `@ai-sdk/google-vertex`       | `GOOGLE_CLOUD_PROJECT`         |
+| OpenRouter     | `@openrouter/ai-sdk-provider` | `OPENROUTER_API_KEY`           |
+| Groq           | `@ai-sdk/groq`                | `GROQ_API_KEY`                 |
+| Mistral        | `@ai-sdk/mistral`             | `MISTRAL_API_KEY`              |
+| xAI            | `@ai-sdk/xai`                 | `XAI_API_KEY`                  |
+| GitHub Copilot | 内置                          | OAuth                          |
+| GitLab         | `@gitlab/gitlab-ai-provider`  | `GITLAB_TOKEN`                 |
+| Cohere         | `@ai-sdk/cohere`              | `COHERE_API_KEY`               |
+| Cerebras       | `@ai-sdk/cerebras`            | `CEREBRAS_API_KEY`             |
+| DeepInfra      | `@ai-sdk/deepinfra`           | `DEEPINFRA_API_KEY`            |
+| Together AI    | `@ai-sdk/togetherai`          | `TOGETHER_AI_API_KEY`          |
+| Perplexity     | `@ai-sdk/perplexity`          | `PERPLEXITY_API_KEY`           |
 
 ## 提供商配置
 
@@ -356,11 +356,11 @@ export ANTHROPIC_API_KEY="sk-ant-..."
 
 ### 2. 选择合适的模型
 
-| 任务类型 | 推荐模型 |
-|----------|----------|
-| 代码生成 | Claude Sonnet, GPT-4o |
-| 快速响应 | Claude Haiku, GPT-4o-mini |
-| 复杂推理 | Claude Opus, o1 |
+| 任务类型 | 推荐模型                   |
+| -------- | -------------------------- |
+| 代码生成 | Claude Sonnet, GPT-4o      |
+| 快速响应 | Claude Haiku, GPT-4o-mini  |
+| 复杂推理 | Claude Opus, o1            |
 | 长上下文 | Claude (200K), Gemini (1M) |
 
 ### 3. 成本控制
@@ -380,5 +380,6 @@ export ANTHROPIC_API_KEY="sk-ant-..."
 ```
 
 ## 下一步
+
 - [定制化指南](../08-customization-guide/build-your-agent.md)
 - [多智能体系统](../08-customization-guide/multi-agent-system.md)

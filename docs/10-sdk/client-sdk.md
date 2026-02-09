@@ -9,7 +9,7 @@ import { createOpencodeClient } from "@opencode-ai/sdk"
 
 const client = createOpencodeClient({
   baseUrl: "http://localhost:4096",
-  directory: "/path/to/project"  // 可选，指定项目目录
+  directory: "/path/to/project", // 可选，指定项目目录
 })
 ```
 
@@ -29,7 +29,7 @@ for (const session of sessions) {
 
 ```typescript
 const session = await client.session.create({
-  title: "New Session"  // 可选
+  title: "New Session", // 可选
 })
 
 console.log(`Created session: ${session.id}`)
@@ -54,7 +54,7 @@ await client.session.delete(sessionId)
 
 ```typescript
 await client.session.update(sessionId, {
-  title: "Updated Title"
+  title: "Updated Title",
 })
 ```
 
@@ -65,13 +65,13 @@ await client.session.update(sessionId, {
 ```typescript
 // 发送文本消息
 await client.session.chat(sessionId, {
-  content: "Hello, OpenCode!"
+  content: "Hello, OpenCode!",
 })
 
 // 发送带附件的消息
 await client.session.chat(sessionId, {
   content: "分析这个文件",
-  attachments: ["/path/to/file.ts"]
+  attachments: ["/path/to/file.ts"],
 })
 ```
 
@@ -98,9 +98,7 @@ for (const message of messages) {
 
 ```typescript
 // 创建 EventSource 连接
-const eventSource = new EventSource(
-  `http://localhost:4096/event?directory=${encodeURIComponent(directory)}`
-)
+const eventSource = new EventSource(`http://localhost:4096/event?directory=${encodeURIComponent(directory)}`)
 
 // 监听消息
 eventSource.onmessage = (event) => {
@@ -170,7 +168,7 @@ console.log(`Model: ${config.model}`)
 
 ```typescript
 await client.config.update({
-  model: "anthropic/claude-sonnet-4-20250514"
+  model: "anthropic/claude-sonnet-4-20250514",
 })
 ```
 
@@ -201,7 +199,7 @@ for (const model of models) {
 ```typescript
 await client.auth.set(providerId, {
   type: "api_key",
-  apiKey: "your-api-key"
+  apiKey: "your-api-key",
 })
 ```
 
@@ -307,18 +305,16 @@ async function main() {
   // 创建客户端
   const client = createOpencodeClient({
     baseUrl: "http://localhost:4096",
-    directory: process.cwd()
+    directory: process.cwd(),
   })
 
   // 创建会话
   const session = await client.session.create({
-    title: "Code Review"
+    title: "Code Review",
   })
 
   // 设置事件监听
-  const eventSource = new EventSource(
-    `http://localhost:4096/event?directory=${encodeURIComponent(process.cwd())}`
-  )
+  const eventSource = new EventSource(`http://localhost:4096/event?directory=${encodeURIComponent(process.cwd())}`)
 
   eventSource.onmessage = (event) => {
     const data = JSON.parse(event.data)
@@ -329,11 +325,11 @@ async function main() {
 
   // 发送消息
   await client.session.chat(session.id, {
-    content: "Review the code in src/index.ts"
+    content: "Review the code in src/index.ts",
   })
 
   // 等待响应完成
-  await new Promise(resolve => setTimeout(resolve, 30000))
+  await new Promise((resolve) => setTimeout(resolve, 30000))
 
   // 清理
   eventSource.close()

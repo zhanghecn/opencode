@@ -263,10 +263,11 @@ await Task({
 ### 使用技能协调代理
 
 ```markdown
-<!-- .opencode/skill/code-quality.md -->
----
+## <!-- .opencode/skill/code-quality.md -->
+
 name: code-quality
 description: Run comprehensive code quality analysis
+
 ---
 
 # Code Quality Analysis
@@ -329,7 +330,7 @@ Now analyze the related test files.`,
 const MAX_PARALLEL = 3
 const batches = chunk(tasks, MAX_PARALLEL)
 for (const batch of batches) {
-  await Promise.all(batch.map(task => Task(task)))
+  await Promise.all(batch.map((task) => Task(task)))
 }
 ```
 
@@ -354,5 +355,6 @@ try {
 ```
 
 ## 下一步
+
 - [技能系统详解](../04-skill-system/README.md)
 - [插件系统详解](../05-plugin-system/README.md)

@@ -157,23 +157,23 @@ bun dev -- serve
 
 ### 入口与调用链（源码阅读顺序）
 
-| 序号 | 文件路径 | 作用 |
-|-----|---------|------|
-| 1 | `packages/opencode/src/index.ts` | CLI 总入口，Yargs 命令定义 |
-| 2 | `packages/opencode/src/cli/cmd/serve.ts` | `opencode serve` 命令实现 |
-| 3 | `packages/opencode/src/cli/cmd/web.ts` | `opencode web` 命令实现 |
-| 4 | `packages/opencode/src/server/server.ts` | HTTP 服务器与路由聚合 |
-| 5 | `packages/opencode/src/server/routes/session.ts` | **SDK 主要调用的会话 API** |
-| 6 | `packages/opencode/src/server/routes/global.ts` | SSE 事件流 |
-| 7 | `packages/opencode/src/session/prompt.ts` | 会话消息循环 |
-| 8 | `packages/opencode/src/agent/agent.ts` | Agent 执行入口 |
-| 9 | `packages/opencode/src/provider/provider.ts` | 模型调用入口 |
-| 10 | `packages/opencode/src/tool/` | 工具执行入口 |
-| 11 | `packages/sdk/js/src/index.ts` | **SDK 入口** |
-| 12 | `packages/sdk/js/src/client.ts` | SDK 客户端封装 |
-| 13 | `packages/sdk/js/src/server.ts` | SDK 服务器启动器 |
-| 14 | `packages/sdk/js/example/example.ts` | SDK 使用示例 |
-| 15 | `packages/app/src/app.tsx` | Web UI 入口 |
+| 序号 | 文件路径                                         | 作用                       |
+| ---- | ------------------------------------------------ | -------------------------- |
+| 1    | `packages/opencode/src/index.ts`                 | CLI 总入口，Yargs 命令定义 |
+| 2    | `packages/opencode/src/cli/cmd/serve.ts`         | `opencode serve` 命令实现  |
+| 3    | `packages/opencode/src/cli/cmd/web.ts`           | `opencode web` 命令实现    |
+| 4    | `packages/opencode/src/server/server.ts`         | HTTP 服务器与路由聚合      |
+| 5    | `packages/opencode/src/server/routes/session.ts` | **SDK 主要调用的会话 API** |
+| 6    | `packages/opencode/src/server/routes/global.ts`  | SSE 事件流                 |
+| 7    | `packages/opencode/src/session/prompt.ts`        | 会话消息循环               |
+| 8    | `packages/opencode/src/agent/agent.ts`           | Agent 执行入口             |
+| 9    | `packages/opencode/src/provider/provider.ts`     | 模型调用入口               |
+| 10   | `packages/opencode/src/tool/`                    | 工具执行入口               |
+| 11   | `packages/sdk/js/src/index.ts`                   | **SDK 入口**               |
+| 12   | `packages/sdk/js/src/client.ts`                  | SDK 客户端封装             |
+| 13   | `packages/sdk/js/src/server.ts`                  | SDK 服务器启动器           |
+| 14   | `packages/sdk/js/example/example.ts`             | SDK 使用示例               |
+| 15   | `packages/app/src/app.tsx`                       | Web UI 入口                |
 
 ### 快速启动服务
 
@@ -215,7 +215,7 @@ import { createOpencodeServer } from "@opencode-ai/sdk"
 const server = await createOpencodeServer({
   hostname: "127.0.0.1",
   port: 4096,
-  timeout: 5000,  // 等待服务器启动的超时时间
+  timeout: 5000, // 等待服务器启动的超时时间
 })
 
 console.log(`Server running at: ${server.url}`)
@@ -230,8 +230,8 @@ server.close()
 
 ```typescript
 // packages/sdk/js/src/index.ts
-export * from "./client.js"   // createOpencodeClient
-export * from "./server.js"   // createOpencodeServer, createOpencodeTui
+export * from "./client.js" // createOpencodeClient
+export * from "./server.js" // createOpencodeServer, createOpencodeTui
 
 // 便捷函数：同时创建 server 和 client
 export async function createOpencode(options?: ServerOptions) {
@@ -250,7 +250,7 @@ import { createOpencodeClient } from "@opencode-ai/sdk"
 // 连接到已运行的 server
 const client = createOpencodeClient({
   baseUrl: "http://127.0.0.1:4096",
-  directory: "/path/to/project",  // 可选：指定工作目录
+  directory: "/path/to/project", // 可选：指定工作目录
 })
 
 // client 提供的 API:
@@ -273,11 +273,11 @@ import { createOpencodeServer, createOpencodeTui } from "@opencode-ai/sdk"
 
 // 启动无头服务器
 const server = await createOpencodeServer({
-  hostname: "127.0.0.1",  // 默认值
-  port: 4096,             // 默认值
-  timeout: 5000,          // 启动超时
+  hostname: "127.0.0.1", // 默认值
+  port: 4096, // 默认值
+  timeout: 5000, // 启动超时
   config: {
-    logLevel: "debug",    // 日志级别
+    logLevel: "debug", // 日志级别
   },
 })
 
@@ -285,8 +285,8 @@ const server = await createOpencodeServer({
 const tui = createOpencodeTui({
   project: "/path/to/project",
   model: "anthropic/claude-sonnet-4-20250514",
-  session: "session-id",  // 可选：恢复会话
-  agent: "agent-name",    // 可选：指定 agent
+  session: "session-id", // 可选：恢复会话
+  agent: "agent-name", // 可选：指定 agent
 })
 ```
 
@@ -337,7 +337,7 @@ await Promise.all(
         ],
       },
     })
-  })
+  }),
 )
 
 // 5. 完成后关闭服务器
@@ -376,19 +376,20 @@ server.close()
 
 ### 关键断点位置
 
-| 调试场景 | 文件 | 断点位置 |
-|---------|------|---------|
-| SDK 请求进入 | `server/routes/session.ts` | POST handler 入口 |
-| 会话创建 | `session/index.ts` | `Session.create()` |
-| 消息处理 | `session/prompt.ts` | `SessionPrompt.prompt()` |
-| Agent 执行 | `agent/agent.ts` | `Agent.execute()` |
-| 工具调用 | `tool/builtin/*.ts` | `execute()` 方法 |
-| LLM 调用 | `provider/provider.ts` | 模型调用入口 |
-| 事件发布 | `bus/index.ts` | `Bus.publish()` |
+| 调试场景     | 文件                       | 断点位置                 |
+| ------------ | -------------------------- | ------------------------ |
+| SDK 请求进入 | `server/routes/session.ts` | POST handler 入口        |
+| 会话创建     | `session/index.ts`         | `Session.create()`       |
+| 消息处理     | `session/prompt.ts`        | `SessionPrompt.prompt()` |
+| Agent 执行   | `agent/agent.ts`           | `Agent.execute()`        |
+| 工具调用     | `tool/builtin/*.ts`        | `execute()` 方法         |
+| LLM 调用     | `provider/provider.ts`     | 模型调用入口             |
+| 事件发布     | `bus/index.ts`             | `Bus.publish()`          |
 
 ### VS Code 调试配置（SDK + Server）
 
 使用本文件上方的 `Debug Server` 与 `Debug SDK Example` 配置即可覆盖：
+
 - server 启动与 API 路由
 - SDK 请求 → session → agent → provider → tool 的完整链路
 
@@ -405,12 +406,12 @@ server.close()
 
 OpenCode 使用结构化日志系统，支持以下级别：
 
-| 级别 | 说明 |
-|------|------|
+| 级别    | 说明         |
+| ------- | ------------ |
 | `debug` | 详细调试信息 |
-| `info` | 一般信息 |
-| `warn` | 警告信息 |
-| `error` | 错误信息 |
+| `info`  | 一般信息     |
+| `warn`  | 警告信息     |
+| `error` | 错误信息     |
 
 ### 设置日志级别
 
@@ -471,6 +472,7 @@ execute: async (args) => {
 ### 调试会话流程
 
 关键文件：
+
 - `packages/opencode/src/session/session.ts` - 会话管理
 - `packages/opencode/src/session/chat.ts` - 聊天处理
 - `packages/opencode/src/session/message.ts` - 消息处理
@@ -478,6 +480,7 @@ execute: async (args) => {
 ### 调试 LLM 调用
 
 关键文件：
+
 - `packages/opencode/src/provider/provider.ts` - 提供商管理
 - `packages/opencode/src/provider/model.ts` - 模型调用
 
@@ -567,12 +570,12 @@ bun test:e2e:ui
 
 ## 环境变量参考
 
-| 变量名 | 说明 | 默认值 |
-|--------|------|--------|
-| `OPENCODE_LOG_LEVEL` | 日志级别 | `info` |
-| `OPENCODE_SERVER_PASSWORD` | Server 认证密码 | 无 |
+| 变量名                     | 说明              | 默认值     |
+| -------------------------- | ----------------- | ---------- |
+| `OPENCODE_LOG_LEVEL`       | 日志级别          | `info`     |
+| `OPENCODE_SERVER_PASSWORD` | Server 认证密码   | 无         |
 | `OPENCODE_SERVER_USERNAME` | Server 认证用户名 | `opencode` |
-| `OPENCODE_CONFIG_CONTENT` | 内联配置 JSON | 无 |
+| `OPENCODE_CONFIG_CONTENT`  | 内联配置 JSON     | 无         |
 
 ---
 

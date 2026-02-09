@@ -236,10 +236,11 @@ Always ensure code is tested and reviewed before delivery.`,
 ### 协作技能
 
 ```markdown
-<!-- .opencode/skill/team-workflow/SKILL.md -->
----
+## <!-- .opencode/skill/team-workflow/SKILL.md -->
+
 name: team-workflow
 description: Use this when coordinating team work
+
 ---
 
 # Team Workflow
@@ -247,27 +248,35 @@ description: Use this when coordinating team work
 ## Task Delegation
 
 ### Frontend Tasks
+
 Delegate to frontend-dev:
+
 - UI components
 - Page layouts
 - Styling
 - Client-side logic
 
 ### Backend Tasks
+
 Delegate to backend-dev:
+
 - API endpoints
 - Database operations
 - Business logic
 - Server-side validation
 
 ### Testing Tasks
+
 Delegate to qa-engineer:
+
 - Unit tests
 - Integration tests
 - E2E tests
 
 ### Security Tasks
+
 Delegate to security-expert:
+
 - Security review
 - Vulnerability scanning
 - Best practices check
@@ -425,7 +434,7 @@ const tests = await Task({
 
 ```typescript
 // 主代理提示词
-`Based on the task type, delegate to:
+;`Based on the task type, delegate to:
 - UI tasks → frontend-dev
 - API tasks → backend-dev
 - Database tasks → backend-dev
@@ -448,25 +457,29 @@ Analyze the request and choose the appropriate team member.`
 使用技能在代理间共享知识：
 
 ```markdown
-<!-- .opencode/skill/project-conventions/SKILL.md -->
----
+## <!-- .opencode/skill/project-conventions/SKILL.md -->
+
 name: project-conventions
 description: Project coding conventions for all team members
+
 ---
 
 # Project Conventions
 
 ## Code Style
+
 - Use TypeScript
 - Follow ESLint rules
 - Use Prettier formatting
 
 ## Naming
+
 - Components: PascalCase
 - Functions: camelCase
 - Constants: UPPER_SNAKE_CASE
 
 ## File Structure
+
 - Components in src/components
 - Pages in src/pages
 - API in src/api
@@ -490,5 +503,6 @@ description: Project coding conventions for all team members
 检查 OpenCode 日志了解代理交互详情。
 
 ## 下一步
+
 - [插件开发指南](../05-plugin-system/plugin-development.md)
 - [MCP 集成](../06-mcp-integration/README.md)

@@ -79,21 +79,17 @@ export default MyPlugin
 
 ```json
 {
-  "plugin": [
-    "my-plugin@1.0.0",
-    "file:///path/to/local/plugin.ts",
-    "@org/plugin@latest"
-  ]
+  "plugin": ["my-plugin@1.0.0", "file:///path/to/local/plugin.ts", "@org/plugin@latest"]
 }
 ```
 
 ### 插件来源
 
-| 来源 | 格式 | 示例 |
-|------|------|------|
-| NPM | `package@version` | `my-plugin@1.0.0` |
-| 本地文件 | `file://path` | `file:///home/user/plugin.ts` |
-| 作用域包 | `@scope/package@version` | `@org/plugin@1.0.0` |
+| 来源     | 格式                     | 示例                          |
+| -------- | ------------------------ | ----------------------------- |
+| NPM      | `package@version`        | `my-plugin@1.0.0`             |
+| 本地文件 | `file://path`            | `file:///home/user/plugin.ts` |
+| 作用域包 | `@scope/package@version` | `@org/plugin@1.0.0`           |
 
 ## 自定义工具开发
 
@@ -141,26 +137,18 @@ const myTool = tool({
 
 ```typescript
 type ToolContext = {
-  sessionID: string      // 会话 ID
-  messageID: string      // 消息 ID
-  agent: string          // 当前代理
-  directory: string      // 项目目录
-  worktree: string       // Git 工作树根目录
-  abort: AbortSignal     // 取消信号
+  sessionID: string // 会话 ID
+  messageID: string // 消息 ID
+  agent: string // 当前代理
+  directory: string // 项目目录
+  worktree: string // Git 工作树根目录
+  abort: AbortSignal // 取消信号
 
   // 更新元数据
-  metadata(input: {
-    title?: string
-    metadata?: Record<string, any>
-  }): void
+  metadata(input: { title?: string; metadata?: Record<string, any> }): void
 
   // 请求权限
-  ask(input: {
-    permission: string
-    patterns: string[]
-    always: string[]
-    metadata: Record<string, any>
-  }): Promise<void>
+  ask(input: { permission: string; patterns: string[]; always: string[]; metadata: Record<string, any> }): Promise<void>
 }
 ```
 
@@ -429,5 +417,6 @@ const MyPlugin: Plugin = async (input) => {
 ```
 
 ## 下一步
+
 - [MCP 集成](../06-mcp-integration/README.md)
 - [提供商系统](../07-provider-system/README.md)

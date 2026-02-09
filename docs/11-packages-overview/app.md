@@ -36,14 +36,14 @@ App 模块 (`@opencode-ai/app`) 是 OpenCode 的共享 Web UI 组件库，被 De
 
 ## 技术栈
 
-| 技术 | 用途 |
-|------|------|
-| SolidJS | 响应式 UI 框架 |
-| Vite | 构建工具 |
-| TailwindCSS | 样式框架 |
-| ghostty-web | 终端模拟器 |
-| Shiki | 代码高亮 |
-| Marked | Markdown 渲染 |
+| 技术        | 用途           |
+| ----------- | -------------- |
+| SolidJS     | 响应式 UI 框架 |
+| Vite        | 构建工具       |
+| TailwindCSS | 样式框架       |
+| ghostty-web | 终端模拟器     |
+| Shiki       | 代码高亮       |
+| Marked      | Markdown 渲染  |
 
 ## 目录结构
 
@@ -103,11 +103,7 @@ bun test:e2e:report
 ```tsx
 import { SessionList } from "@opencode-ai/app"
 
-<SessionList
-  sessions={sessions}
-  currentSession={currentSession}
-  onSelect={handleSelect}
-/>
+;<SessionList sessions={sessions} currentSession={currentSession} onSelect={handleSelect} />
 ```
 
 ### MessageView
@@ -117,10 +113,7 @@ import { SessionList } from "@opencode-ai/app"
 ```tsx
 import { MessageView } from "@opencode-ai/app"
 
-<MessageView
-  messages={messages}
-  onRetry={handleRetry}
-/>
+;<MessageView messages={messages} onRetry={handleRetry} />
 ```
 
 ### Terminal
@@ -130,10 +123,7 @@ import { MessageView } from "@opencode-ai/app"
 ```tsx
 import { Terminal } from "@opencode-ai/app"
 
-<Terminal
-  sessionId={sessionId}
-  onData={handleData}
-/>
+;<Terminal sessionId={sessionId} onData={handleData} />
 ```
 
 ## 状态管理
@@ -152,7 +142,7 @@ export function useSession() {
     sessions,
     currentSession,
     setCurrentSession,
-    refetch
+    refetch,
   }
 }
 ```
@@ -166,7 +156,7 @@ App 通过 SDK 与 Server 通信：
 import { createOpencodeClient } from "@opencode-ai/sdk"
 
 export const client = createOpencodeClient({
-  baseUrl: import.meta.env.VITE_API_URL || "http://localhost:4096"
+  baseUrl: import.meta.env.VITE_API_URL || "http://localhost:4096",
 })
 ```
 
@@ -235,16 +225,16 @@ export default defineConfig({
   build: {
     lib: {
       entry: "src/index.ts",
-      formats: ["es"]
-    }
-  }
+      formats: ["es"],
+    },
+  },
 })
 ```
 
 ### 环境变量
 
-| 变量 | 说明 | 默认值 |
-|------|------|--------|
+| 变量           | 说明           | 默认值                  |
+| -------------- | -------------- | ----------------------- |
 | `VITE_API_URL` | API 服务器地址 | `http://localhost:4096` |
 
 ## 下一步

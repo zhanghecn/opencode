@@ -34,13 +34,13 @@ Web 模块 (`@opencode-ai/web`) 是 OpenCode 的官方网站，包含文档和�
 
 ## 技术栈
 
-| 技术 | 用途 |
-|------|------|
-| Astro | 静态站点生成器 |
-| Starlight | 文档主题 |
-| SolidJS | 交互组件 |
-| Shiki | 代码高亮 |
-| Marked | Markdown 渲染 |
+| 技术      | 用途           |
+| --------- | -------------- |
+| Astro     | 静态站点生成器 |
+| Starlight | 文档主题       |
+| SolidJS   | 交互组件       |
+| Shiki     | 代码高亮       |
+| Marked    | Markdown 渲染  |
 
 ## 目录结构
 
@@ -148,29 +148,29 @@ export default defineConfig({
     starlight({
       title: "OpenCode",
       social: {
-        github: "https://github.com/anomalyco/opencode"
+        github: "https://github.com/anomalyco/opencode",
       },
       sidebar: [
         {
           label: "Getting Started",
           items: [
             { label: "Installation", link: "/docs/installation" },
-            { label: "Quick Start", link: "/docs/quick-start" }
-          ]
-        }
-      ]
+            { label: "Quick Start", link: "/docs/quick-start" },
+          ],
+        },
+      ],
     }),
-    solidJs()
+    solidJs(),
   ],
   output: "server",
-  adapter: cloudflare()
+  adapter: cloudflare(),
 })
 ```
 
 ### 环境变量
 
-| 变量 | 说明 | 默认值 |
-|------|------|--------|
+| 变量           | 说明           | 默认值         |
+| -------------- | -------------- | -------------- |
 | `VITE_API_URL` | API 服务器地址 | 本地开发时为空 |
 
 ## 部署

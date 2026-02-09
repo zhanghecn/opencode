@@ -35,12 +35,12 @@ Desktop 模块 (`@opencode-ai/desktop`) 是 OpenCode 的原生桌面应用，基
 
 ## 技术栈
 
-| 技术 | 用途 |
-|------|------|
-| Tauri 2.x | 桌面应用框架 |
-| Rust | 后端逻辑 |
-| SolidJS | 前端 UI (通过 App 模块) |
-| Vite | 前端构建 |
+| 技术      | 用途                    |
+| --------- | ----------------------- |
+| Tauri 2.x | 桌面应用框架            |
+| Rust      | 后端逻辑                |
+| SolidJS   | 前端 UI (通过 App 模块) |
+| Vite      | 前端构建                |
 
 ## 目录结构
 
@@ -96,18 +96,18 @@ bun tauri build
 
 Desktop 使用以下 Tauri 插件：
 
-| 插件 | 用途 |
-|------|------|
-| `@tauri-apps/plugin-dialog` | 原生对话框 |
-| `@tauri-apps/plugin-shell` | Shell 命令执行 |
-| `@tauri-apps/plugin-store` | 本地存储 |
-| `@tauri-apps/plugin-updater` | 自动更新 |
-| `@tauri-apps/plugin-notification` | 系统通知 |
-| `@tauri-apps/plugin-os` | 系统信息 |
-| `@tauri-apps/plugin-process` | 进程管理 |
-| `@tauri-apps/plugin-http` | HTTP 请求 |
-| `@tauri-apps/plugin-window-state` | 窗口状态保存 |
-| `@tauri-apps/plugin-opener` | 打开文件/URL |
+| 插件                              | 用途           |
+| --------------------------------- | -------------- |
+| `@tauri-apps/plugin-dialog`       | 原生对话框     |
+| `@tauri-apps/plugin-shell`        | Shell 命令执行 |
+| `@tauri-apps/plugin-store`        | 本地存储       |
+| `@tauri-apps/plugin-updater`      | 自动更新       |
+| `@tauri-apps/plugin-notification` | 系统通知       |
+| `@tauri-apps/plugin-os`           | 系统信息       |
+| `@tauri-apps/plugin-process`      | 进程管理       |
+| `@tauri-apps/plugin-http`         | HTTP 请求      |
+| `@tauri-apps/plugin-window-state` | 窗口状态保存   |
+| `@tauri-apps/plugin-opener`       | 打开文件/URL   |
 
 ## 配置
 
@@ -147,13 +147,7 @@ Desktop 使用以下 Tauri 插件：
 {
   "identifier": "default",
   "windows": ["main"],
-  "permissions": [
-    "core:default",
-    "shell:allow-spawn",
-    "dialog:allow-open",
-    "store:allow-get",
-    "store:allow-set"
-  ]
+  "permissions": ["core:default", "shell:allow-spawn", "dialog:allow-open", "store:allow-get", "store:allow-set"]
 }
 ```
 
@@ -188,7 +182,7 @@ import { Command } from "@tauri-apps/plugin-shell"
 export async function selectDirectory() {
   return await open({
     directory: true,
-    multiple: false
+    multiple: false,
   })
 }
 
@@ -200,21 +194,21 @@ export async function runCommand(cmd: string, args: string[]) {
 
 ## 支持的平台
 
-| 平台 | 架构 | 状态 |
-|------|------|------|
-| Windows | x64, arm64 | ✅ |
-| macOS | x64, arm64 | ✅ |
-| Linux | x64, arm64 | ✅ |
+| 平台    | 架构       | 状态 |
+| ------- | ---------- | ---- |
+| Windows | x64, arm64 | ✅   |
+| macOS   | x64, arm64 | ✅   |
+| Linux   | x64, arm64 | ✅   |
 
 ## 构建产物
 
 构建后的应用位于 `src-tauri/target/release/bundle/`:
 
-| 平台 | 格式 |
-|------|------|
-| Windows | `.msi`, `.exe` |
-| macOS | `.dmg`, `.app` |
-| Linux | `.deb`, `.rpm`, `.AppImage` |
+| 平台    | 格式                        |
+| ------- | --------------------------- |
+| Windows | `.msi`, `.exe`              |
+| macOS   | `.dmg`, `.app`              |
+| Linux   | `.deb`, `.rpm`, `.AppImage` |
 
 ## 自动更新
 
@@ -258,7 +252,7 @@ import { createOpencodeServer } from "@opencode-ai/sdk"
 
 // 启动内嵌 Server
 const server = await createOpencodeServer({
-  port: 0  // 自动选择端口
+  port: 0, // 自动选择端口
 })
 ```
 

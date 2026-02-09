@@ -45,20 +45,20 @@ OpenCode 是一个强大的 AI 编程助手 CLI 工具，支持多种 AI 提供�
 
 ## 文档目录
 
-| 章节 | 内容 | 适合人群 |
-|------|------|----------|
-| [00-架构概述](./00-architecture/) | 整体架构、数据流、扩展点 | 所有开发者 |
-| [01-会话系统](./01-session-system/) | 会话生命周期、消息处理、LLM 交互 | 核心开发者 |
-| [02-工具系统](./02-tool-system/) | 工具定义、内置工具、自定义工具 | 工具开发者 |
-| [03-代理系统](./03-agent-system/) | 代理类型、自定义代理、多代理协作 | 代理开发者 |
-| [04-技能系统](./04-skill-system/) | 技能定义、技能开发 | 技能开发者 |
-| [05-插件系统](./05-plugin-system/) | 钩子函数、插件开发 | 插件开发者 |
-| [06-MCP 集成](./06-mcp-integration/) | MCP 配置、服务器开发 | MCP 开发者 |
-| [07-提供商系统](./07-provider-system/) | 多提供商支持、模型配置 | 运维人员 |
-| [08-定制化指南](./08-customization-guide/) | 构建智能体、多智能体系统 | 所有开发者 |
-| [09-开发指南](./09-development-guide/) | 开发环境、调试、Server 模式 | 贡献者 |
-| [10-SDK](./10-sdk/) | SDK 使用、客户端/服务端 API | SDK 用户 |
-| [11-模块说明](./11-packages-overview/) | App、Web、Desktop、Console | 架构了解 |
+| 章节                                       | 内容                             | 适合人群   |
+| ------------------------------------------ | -------------------------------- | ---------- |
+| [00-架构概述](./00-architecture/)          | 整体架构、数据流、扩展点         | 所有开发者 |
+| [01-会话系统](./01-session-system/)        | 会话生命周期、消息处理、LLM 交互 | 核心开发者 |
+| [02-工具系统](./02-tool-system/)           | 工具定义、内置工具、自定义工具   | 工具开发者 |
+| [03-代理系统](./03-agent-system/)          | 代理类型、自定义代理、多代理协作 | 代理开发者 |
+| [04-技能系统](./04-skill-system/)          | 技能定义、技能开发               | 技能开发者 |
+| [05-插件系统](./05-plugin-system/)         | 钩子函数、插件开发               | 插件开发者 |
+| [06-MCP 集成](./06-mcp-integration/)       | MCP 配置、服务器开发             | MCP 开发者 |
+| [07-提供商系统](./07-provider-system/)     | 多提供商支持、模型配置           | 运维人员   |
+| [08-定制化指南](./08-customization-guide/) | 构建智能体、多智能体系统         | 所有开发者 |
+| [09-开发指南](./09-development-guide/)     | 开发环境、调试、Server 模式      | 贡献者     |
+| [10-SDK](./10-sdk/)                        | SDK 使用、客户端/服务端 API      | SDK 用户   |
+| [11-模块说明](./11-packages-overview/)     | App、Web、Desktop、Console       | 架构了解   |
 
 ## 快速开始
 
@@ -165,8 +165,12 @@ description: 技能描述
 
 ```typescript
 const MyPlugin: Plugin = async (input) => ({
-  event: async ({ event }) => { /* 处理事件 */ },
-  tool: { /* 自定义工具 */ },
+  event: async ({ event }) => {
+    /* 处理事件 */
+  },
+  tool: {
+    /* 自定义工具 */
+  },
 })
 ```
 
@@ -174,14 +178,14 @@ const MyPlugin: Plugin = async (input) => ({
 
 ## 扩展方式对比
 
-| 扩展方式 | 复杂度 | 能力 | 适用场景 |
-|----------|--------|------|----------|
-| 配置文件 | ⭐ | 基础定制 | 调整参数、权限 |
-| 技能 | ⭐⭐ | 提示词扩展 | 专业领域知识 |
-| 自定义工具 | ⭐⭐⭐ | 功能扩展 | 新增操作能力 |
-| 插件 | ⭐⭐⭐⭐ | 深度定制 | 钩子函数、认证 |
-| MCP 服务器 | ⭐⭐⭐⭐ | 外部集成 | 第三方服务 |
-| 源码修改 | ⭐⭐⭐⭐⭐ | 完全控制 | 核心逻辑修改 |
+| 扩展方式   | 复杂度     | 能力       | 适用场景       |
+| ---------- | ---------- | ---------- | -------------- |
+| 配置文件   | ⭐         | 基础定制   | 调整参数、权限 |
+| 技能       | ⭐⭐       | 提示词扩展 | 专业领域知识   |
+| 自定义工具 | ⭐⭐⭐     | 功能扩展   | 新增操作能力   |
+| 插件       | ⭐⭐⭐⭐   | 深度定制   | 钩子函数、认证 |
+| MCP 服务器 | ⭐⭐⭐⭐   | 外部集成   | 第三方服务     |
+| 源码修改   | ⭐⭐⭐⭐⭐ | 完全控制   | 核心逻辑修改   |
 
 ## 常见用例
 
@@ -254,21 +258,21 @@ const MyPlugin: Plugin = async (input) => ({
 
 ## 关键文件路径
 
-| 模块 | 路径 | 说明 |
-|------|------|------|
-| 入口 | `packages/opencode/src/index.ts` | CLI 入口点 |
-| 会话 | `packages/opencode/src/session/` | 会话管理 |
-| 工具 | `packages/opencode/src/tool/` | 工具系统 |
-| 代理 | `packages/opencode/src/agent/` | 代理定义 |
-| 技能 | `packages/opencode/src/skill/` | 技能加载 |
-| 插件 | `packages/opencode/src/plugin/` | 插件系统 |
-| MCP | `packages/opencode/src/mcp/` | MCP 集成 |
-| 提供商 | `packages/opencode/src/provider/` | AI 提供商 |
-| Server | `packages/opencode/src/server/` | API 服务器 |
-| SDK | `packages/sdk/js/src/` | JavaScript SDK |
-| App | `packages/app/src/` | Web UI 组件 |
-| Desktop | `packages/desktop/` | 桌面应用 |
-| Console | `packages/console/` | 管理控制台 |
+| 模块    | 路径                              | 说明           |
+| ------- | --------------------------------- | -------------- |
+| 入口    | `packages/opencode/src/index.ts`  | CLI 入口点     |
+| 会话    | `packages/opencode/src/session/`  | 会话管理       |
+| 工具    | `packages/opencode/src/tool/`     | 工具系统       |
+| 代理    | `packages/opencode/src/agent/`    | 代理定义       |
+| 技能    | `packages/opencode/src/skill/`    | 技能加载       |
+| 插件    | `packages/opencode/src/plugin/`   | 插件系统       |
+| MCP     | `packages/opencode/src/mcp/`      | MCP 集成       |
+| 提供商  | `packages/opencode/src/provider/` | AI 提供商      |
+| Server  | `packages/opencode/src/server/`   | API 服务器     |
+| SDK     | `packages/sdk/js/src/`            | JavaScript SDK |
+| App     | `packages/app/src/`               | Web UI 组件    |
+| Desktop | `packages/desktop/`               | 桌面应用       |
+| Console | `packages/console/`               | 管理控制台     |
 
 ## 学习路径
 

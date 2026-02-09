@@ -34,7 +34,7 @@ import { createOpencode } from "@opencode-ai/sdk"
 // 自动启动 Server 并创建客户端
 const { client, server } = await createOpencode({
   port: 4096,
-  hostname: "127.0.0.1"
+  hostname: "127.0.0.1",
 })
 
 // 使用客户端
@@ -45,7 +45,7 @@ const session = await client.session.create({})
 
 // 发送消息
 await client.session.chat(session.id, {
-  content: "Hello, OpenCode!"
+  content: "Hello, OpenCode!",
 })
 
 // 完成后关闭 Server
@@ -59,7 +59,7 @@ import { createOpencodeClient } from "@opencode-ai/sdk"
 
 // 连接到已运行的 Server
 const client = createOpencodeClient({
-  baseUrl: "http://localhost:4096"
+  baseUrl: "http://localhost:4096",
 })
 
 // 使用客户端
@@ -74,7 +74,7 @@ import { createOpencodeServer } from "@opencode-ai/sdk"
 // 启动 Server
 const server = await createOpencodeServer({
   port: 4096,
-  hostname: "127.0.0.1"
+  hostname: "127.0.0.1",
 })
 
 console.log(`Server running at ${server.url}`)
@@ -115,11 +115,11 @@ const session: Session = await client.session.get(sessionId)
 
 ```typescript
 interface Options {
-  hostname?: string    // 默认 "127.0.0.1"
-  port?: number        // 默认 4096
+  hostname?: string // 默认 "127.0.0.1"
+  port?: number // 默认 4096
   signal?: AbortSignal // 用于取消
-  timeout?: number     // 启动超时 (ms)，默认 5000
-  config?: Config      // OpenCode 配置
+  timeout?: number // 启动超时 (ms)，默认 5000
+  config?: Config // OpenCode 配置
 }
 ```
 
@@ -127,9 +127,9 @@ interface Options {
 
 ```typescript
 interface Config {
-  baseUrl?: string     // Server URL
-  directory?: string   // 项目目录
-  headers?: Record<string, string>  // 自定义请求头
+  baseUrl?: string // Server URL
+  directory?: string // 项目目录
+  headers?: Record<string, string> // 自定义请求头
   fetch?: typeof fetch // 自定义 fetch 实现
 }
 ```
@@ -138,11 +138,11 @@ interface Config {
 
 ```typescript
 interface ServerOptions {
-  hostname?: string    // 默认 "127.0.0.1"
-  port?: number        // 默认 4096
+  hostname?: string // 默认 "127.0.0.1"
+  port?: number // 默认 4096
   signal?: AbortSignal // 用于取消
-  timeout?: number     // 启动超时 (ms)
-  config?: Config      // OpenCode 配置
+  timeout?: number // 启动超时 (ms)
+  config?: Config // OpenCode 配置
 }
 ```
 
@@ -152,7 +152,7 @@ interface ServerOptions {
 import { createOpencodeClient } from "@opencode-ai/sdk"
 
 const client = createOpencodeClient({
-  baseUrl: "http://localhost:4096"
+  baseUrl: "http://localhost:4096",
 })
 
 try {

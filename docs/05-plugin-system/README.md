@@ -52,11 +52,11 @@
 
 ## 关键文件
 
-| 文件 | 职责 |
-|------|------|
-| `plugin/index.ts` | 插件加载和管理 |
-| `packages/plugin/src/index.ts` | 插件类型定义 |
-| `packages/plugin/src/tool.ts` | 工具定义辅助函数 |
+| 文件                           | 职责             |
+| ------------------------------ | ---------------- |
+| `plugin/index.ts`              | 插件加载和管理   |
+| `packages/plugin/src/index.ts` | 插件类型定义     |
+| `packages/plugin/src/tool.ts`  | 工具定义辅助函数 |
 
 ## 插件加载流程
 
@@ -112,11 +112,7 @@
 ```typescript
 // 文件: packages/opencode/src/plugin/index.ts
 
-export async function trigger<Name extends keyof Hooks>(
-  name: Name,
-  input: Input,
-  output: Output
-): Promise<Output> {
+export async function trigger<Name extends keyof Hooks>(name: Name, input: Input, output: Output): Promise<Output> {
   for (const hook of await state().then((x) => x.hooks)) {
     const fn = hook[name]
     if (!fn) continue
@@ -128,19 +124,20 @@ export async function trigger<Name extends keyof Hooks>(
 
 ## 可用钩子列表
 
-| 钩子 | 用途 | 输入 | 输出 |
-|------|------|------|------|
-| `event` | 监听系统事件 | `{ event }` | - |
-| `config` | 配置加载时 | `Config` | - |
-| `tool` | 注册自定义工具 | - | `ToolDefinition` |
-| `auth` | 认证处理 | - | `AuthHook` |
-| `chat.message` | 消息接收时 | `{ sessionID, agent, model }` | `{ message, parts }` |
-| `chat.params` | 修改 LLM 参数 | `{ sessionID, agent, model }` | `{ temperature, topP }` |
-| `chat.headers` | 修改请求头 | `{ sessionID, agent, model }` | `{ headers }` |
-| `permission.ask` | 权限请求时 | `Permission` | `{ status }` |
-| `tool.execute.before` | 工具执行前 | `{ tool, sessionID }` | `{ args }` |
-| `tool.execute.after` | 工具执行后 | `{ tool, sessionID }` | `{ title, output }` |
+| 钩子                  | 用途           | 输入                          | 输出                    |
+| --------------------- | -------------- | ----------------------------- | ----------------------- |
+| `event`               | 监听系统事件   | `{ event }`                   | -                       |
+| `config`              | 配置加载时     | `Config`                      | -                       |
+| `tool`                | 注册自定义工具 | -                             | `ToolDefinition`        |
+| `auth`                | 认证处理       | -                             | `AuthHook`              |
+| `chat.message`        | 消息接收时     | `{ sessionID, agent, model }` | `{ message, parts }`    |
+| `chat.params`         | 修改 LLM 参数  | `{ sessionID, agent, model }` | `{ temperature, topP }` |
+| `chat.headers`        | 修改请求头     | `{ sessionID, agent, model }` | `{ headers }`           |
+| `permission.ask`      | 权限请求时     | `Permission`                  | `{ status }`            |
+| `tool.execute.before` | 工具执行前     | `{ tool, sessionID }`         | `{ args }`              |
+| `tool.execute.after`  | 工具执行后     | `{ tool, sessionID }`         | `{ title, output }`     |
 
 ## 下一步
+
 - [钩子函数参考](./hooks-reference.md)
 - [插件开发指南](./plugin-development.md)

@@ -179,6 +179,7 @@ Log.init({
 ```
 
 **主要特性：**
+
 - 为每次测试运行创建隔离的临时目录
 - 设置 XDG 环境变量以防止干扰用户配置
 - 清除所有 Provider API 密钥以确保干净的测试状态
@@ -204,10 +205,10 @@ function sanitizePath(p: string): string {
 }
 
 type TmpDirOptions<T> = {
-  git?: boolean                           // 初始化 git 仓库
-  config?: Partial<Config.Info>           // 写入 opencode.json 配置
-  init?: (dir: string) => Promise<T>      // 自定义初始化函数
-  dispose?: (dir: string) => Promise<T>   // 自定义清理函数
+  git?: boolean // 初始化 git 仓库
+  config?: Partial<Config.Info> // 写入 opencode.json 配置
+  init?: (dir: string) => Promise<T> // 自定义初始化函数
+  dispose?: (dir: string) => Promise<T> // 自定义清理函数
 }
 
 /**
@@ -241,9 +242,7 @@ type TmpDirOptions<T> = {
  */
 export async function tmpdir<T>(options?: TmpDirOptions<T>) {
   // 创建唯一的临时目录
-  const dirpath = sanitizePath(
-    path.join(os.tmpdir(), "opencode-test-" + Math.random().toString(36).slice(2))
-  )
+  const dirpath = sanitizePath(path.join(os.tmpdir(), "opencode-test-" + Math.random().toString(36).slice(2)))
   await fs.mkdir(dirpath, { recursive: true })
 
   // 如果请求，初始化 git 仓库
@@ -280,6 +279,7 @@ export async function tmpdir<T>(options?: TmpDirOptions<T>) {
 ```
 
 **主要特性：**
+
 - 为测试隔离创建唯一的临时目录
 - 可选的 git 仓库初始化
 - 可选的配置文件创建
@@ -294,8 +294,8 @@ export async function tmpdir<T>(options?: TmpDirOptions<T>) {
 
 Agent 配置、权限和行为的测试。
 
-| 测试文件 | 源文件 | 用途 |
-|----------|--------|------|
+| 测试文件        | 源文件               | 用途                 |
+| --------------- | -------------------- | -------------------- |
 | `agent.test.ts` | `src/agent/agent.ts` | Agent 配置和权限测试 |
 
 **关键测试用例：**
@@ -345,10 +345,10 @@ test("custom agent from config creates new agent", async () => {
 
 控制工具访问的权限系统测试。
 
-| 测试文件 | 源文件 | 用途 |
-|----------|--------|------|
-| `next.test.ts` | `src/permission/next.ts` | 权限评估和规则匹配 |
-| `arity.test.ts` | `src/permission/arity.ts` | 权限元数测试 |
+| 测试文件        | 源文件                    | 用途               |
+| --------------- | ------------------------- | ------------------ |
+| `next.test.ts`  | `src/permission/next.ts`  | 权限评估和规则匹配 |
+| `arity.test.ts` | `src/permission/arity.ts` | 权限元数测试       |
 
 **关键测试用例：**
 
@@ -392,16 +392,16 @@ test("ask - resolves immediately when action is allow", async () => {
 
 各种工具实现的测试。
 
-| 测试文件 | 源文件 | 用途 |
-|----------|--------|------|
-| `bash.test.ts` | `src/tool/bash.ts` | Bash 命令执行 |
-| `read.test.ts` | `src/tool/read.ts` | 文件读取 |
-| `grep.test.ts` | `src/tool/grep.ts` | 内容搜索 |
-| `apply_patch.test.ts` | `src/tool/apply_patch.ts` | Patch 应用 |
-| `truncation.test.ts` | `src/tool/truncation.ts` | 输出截断 |
-| `registry.test.ts` | `src/tool/registry.ts` | 工具注册表 |
-| `question.test.ts` | `src/tool/question.ts` | 问题工具 |
-| `external-directory.test.ts` | `src/tool/` | 外部目录访问 |
+| 测试文件                     | 源文件                    | 用途          |
+| ---------------------------- | ------------------------- | ------------- |
+| `bash.test.ts`               | `src/tool/bash.ts`        | Bash 命令执行 |
+| `read.test.ts`               | `src/tool/read.ts`        | 文件读取      |
+| `grep.test.ts`               | `src/tool/grep.ts`        | 内容搜索      |
+| `apply_patch.test.ts`        | `src/tool/apply_patch.ts` | Patch 应用    |
+| `truncation.test.ts`         | `src/tool/truncation.ts`  | 输出截断      |
+| `registry.test.ts`           | `src/tool/registry.ts`    | 工具注册表    |
+| `question.test.ts`           | `src/tool/question.ts`    | 问题工具      |
+| `external-directory.test.ts` | `src/tool/`               | 外部目录访问  |
 
 **关键测试用例：**
 
@@ -450,11 +450,11 @@ test("truncates output exceeding line limit", async () => {
 
 配置加载和解析的测试。
 
-| 测试文件 | 源文件 | 用途 |
-|----------|--------|------|
-| `config.test.ts` | `src/config/config.ts` | 配置加载和合并 |
-| `markdown.test.ts` | `src/config/markdown.ts` | Markdown 配置解析 |
-| `agent-color.test.ts` | `src/config/` | Agent 颜色配置 |
+| 测试文件              | 源文件                   | 用途              |
+| --------------------- | ------------------------ | ----------------- |
+| `config.test.ts`      | `src/config/config.ts`   | 配置加载和合并    |
+| `markdown.test.ts`    | `src/config/markdown.ts` | Markdown 配置解析 |
+| `agent-color.test.ts` | `src/config/`            | Agent 颜色配置    |
 
 **关键测试用例：**
 
@@ -511,15 +511,15 @@ test("handles environment variable substitution", async () => {
 
 会话管理和生命周期的测试。
 
-| 测试文件 | 源文件 | 用途 |
-|----------|--------|------|
-| `session.test.ts` | `src/session/` | 会话创建和事件 |
-| `compaction.test.ts` | `src/session/compaction.ts` | 消息压缩 |
-| `retry.test.ts` | `src/session/retry.ts` | 重试逻辑 |
-| `llm.test.ts` | `src/session/llm.ts` | LLM 集成 |
-| `revert-compact.test.ts` | `src/session/` | 回滚和压缩 |
-| `message-v2.test.ts` | `src/session/message.ts` | 消息格式 v2 |
-| `instruction.test.ts` | `src/session/instruction.ts` | 指令处理 |
+| 测试文件                 | 源文件                       | 用途           |
+| ------------------------ | ---------------------------- | -------------- |
+| `session.test.ts`        | `src/session/`               | 会话创建和事件 |
+| `compaction.test.ts`     | `src/session/compaction.ts`  | 消息压缩       |
+| `retry.test.ts`          | `src/session/retry.ts`       | 重试逻辑       |
+| `llm.test.ts`            | `src/session/llm.ts`         | LLM 集成       |
+| `revert-compact.test.ts` | `src/session/`               | 回滚和压缩     |
+| `message-v2.test.ts`     | `src/session/message.ts`     | 消息格式 v2    |
+| `instruction.test.ts`    | `src/session/instruction.ts` | 指令处理       |
 
 **关键测试用例：**
 
@@ -553,8 +553,8 @@ test("should emit session.started event when session is created", async () => {
 
 文件快照和回滚功能的测试。
 
-| 测试文件 | 源文件 | 用途 |
-|----------|--------|------|
+| 测试文件           | 源文件          | 用途           |
+| ------------------ | --------------- | -------------- |
 | `snapshot.test.ts` | `src/snapshot/` | 快照跟踪和回滚 |
 
 **关键测试用例：**
@@ -607,22 +607,22 @@ test("revert should remove new files", async () => {
 
 ### 7. 其他测试模块
 
-| 目录 | 用途 |
-|------|------|
-| `test/acp/` | Agent Client Protocol 测试 |
-| `test/cli/` | CLI 和 TUI 测试 |
-| `test/file/` | 文件操作（忽略模式、路径遍历） |
-| `test/ide/` | IDE 集成测试 |
-| `test/lsp/` | Language Server Protocol 客户端测试 |
-| `test/mcp/` | Model Context Protocol 测试 |
-| `test/patch/` | Patch 应用测试 |
-| `test/plugin/` | 插件系统测试 |
-| `test/project/` | 项目管理测试 |
-| `test/provider/` | AI Provider 集成测试 |
-| `test/question/` | 问题/提示测试 |
-| `test/server/` | 服务器功能测试 |
-| `test/skill/` | Skill 系统测试 |
-| `test/util/` | 工具函数测试 |
+| 目录             | 用途                                |
+| ---------------- | ----------------------------------- |
+| `test/acp/`      | Agent Client Protocol 测试          |
+| `test/cli/`      | CLI 和 TUI 测试                     |
+| `test/file/`     | 文件操作（忽略模式、路径遍历）      |
+| `test/ide/`      | IDE 集成测试                        |
+| `test/lsp/`      | Language Server Protocol 客户端测试 |
+| `test/mcp/`      | Model Context Protocol 测试         |
+| `test/patch/`    | Patch 应用测试                      |
+| `test/plugin/`   | 插件系统测试                        |
+| `test/project/`  | 项目管理测试                        |
+| `test/provider/` | AI Provider 集成测试                |
+| `test/question/` | 问题/提示测试                       |
+| `test/server/`   | 服务器功能测试                      |
+| `test/skill/`    | Skill 系统测试                      |
+| `test/util/`     | 工具函数测试                        |
 
 ---
 
@@ -668,10 +668,7 @@ test("example with Instance.provide", async () => {
 用于评估权限的辅助函数：
 
 ```typescript
-function evalPerm(
-  agent: Agent.Info | undefined,
-  permission: string
-): PermissionNext.Action | undefined {
+function evalPerm(agent: Agent.Info | undefined, permission: string): PermissionNext.Action | undefined {
   if (!agent) return undefined
   return PermissionNext.evaluate(permission, "*", agent.permission).action
 }
@@ -711,10 +708,7 @@ test("tool with mock context", async () => {
     directory: projectRoot,
     fn: async () => {
       const bash = await BashTool.init()
-      const result = await bash.execute(
-        { command: "echo test", description: "Test" },
-        ctx,
-      )
+      const result = await bash.execute({ command: "echo test", description: "Test" }, ctx)
       expect(result.metadata.exit).toBe(0)
     },
   })

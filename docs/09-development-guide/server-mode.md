@@ -40,12 +40,12 @@ bun dev -- serve
 
 ### 启动参数
 
-| 参数 | 说明 | 默认值 |
-|------|------|--------|
-| `--hostname` | 监听地址 | `127.0.0.1` |
-| `--port` | 监听端口 | `4096` |
-| `--mdns` | 启用 mDNS 发现 | `false` |
-| `--log-level` | 日志级别 | `info` |
+| 参数          | 说明           | 默认值      |
+| ------------- | -------------- | ----------- |
+| `--hostname`  | 监听地址       | `127.0.0.1` |
+| `--port`      | 监听端口       | `4096`      |
+| `--mdns`      | 启用 mDNS 发现 | `false`     |
+| `--log-level` | 日志级别       | `info`      |
 
 ```bash
 # 指定端口和地址
@@ -69,66 +69,66 @@ opencode serve
 
 ### 核心端点
 
-| 端点 | 方法 | 说明 |
-|------|------|------|
-| `/doc` | GET | OpenAPI 文档 |
-| `/event` | GET | SSE 事件流 |
-| `/path` | GET | 获取路径信息 |
-| `/vcs` | GET | 获取版本控制信息 |
+| 端点     | 方法 | 说明             |
+| -------- | ---- | ---------------- |
+| `/doc`   | GET  | OpenAPI 文档     |
+| `/event` | GET  | SSE 事件流       |
+| `/path`  | GET  | 获取路径信息     |
+| `/vcs`   | GET  | 获取版本控制信息 |
 
 ### 会话管理
 
-| 端点 | 方法 | 说明 |
-|------|------|------|
-| `/session` | GET | 列出所有会话 |
-| `/session` | POST | 创建新会话 |
-| `/session/:id` | GET | 获取会话详情 |
-| `/session/:id` | DELETE | 删除会话 |
-| `/session/:id/chat` | POST | 发送消息 |
-| `/session/:id/abort` | POST | 中止当前操作 |
+| 端点                 | 方法   | 说明         |
+| -------------------- | ------ | ------------ |
+| `/session`           | GET    | 列出所有会话 |
+| `/session`           | POST   | 创建新会话   |
+| `/session/:id`       | GET    | 获取会话详情 |
+| `/session/:id`       | DELETE | 删除会话     |
+| `/session/:id/chat`  | POST   | 发送消息     |
+| `/session/:id/abort` | POST   | 中止当前操作 |
 
 ### 项目管理
 
-| 端点 | 方法 | 说明 |
-|------|------|------|
-| `/project` | GET | 获取项目信息 |
-| `/project/init` | POST | 初始化项目 |
+| 端点            | 方法 | 说明         |
+| --------------- | ---- | ------------ |
+| `/project`      | GET  | 获取项目信息 |
+| `/project/init` | POST | 初始化项目   |
 
 ### 配置管理
 
-| 端点 | 方法 | 说明 |
-|------|------|------|
-| `/config` | GET | 获取配置 |
-| `/config` | PUT | 更新配置 |
+| 端点      | 方法 | 说明     |
+| --------- | ---- | -------- |
+| `/config` | GET  | 获取配置 |
+| `/config` | PUT  | 更新配置 |
 
 ### 提供商管理
 
-| 端点 | 方法 | 说明 |
-|------|------|------|
-| `/provider` | GET | 列出提供商 |
-| `/provider/:id/model` | GET | 列出模型 |
-| `/auth/:providerID` | PUT | 设置认证 |
-| `/auth/:providerID` | DELETE | 删除认证 |
+| 端点                  | 方法   | 说明       |
+| --------------------- | ------ | ---------- |
+| `/provider`           | GET    | 列出提供商 |
+| `/provider/:id/model` | GET    | 列出模型   |
+| `/auth/:providerID`   | PUT    | 设置认证   |
+| `/auth/:providerID`   | DELETE | 删除认证   |
 
 ### MCP 管理
 
-| 端点 | 方法 | 说明 |
-|------|------|------|
-| `/mcp` | GET | 列出 MCP 服务器 |
-| `/mcp/:id/tool` | GET | 列出 MCP 工具 |
+| 端点            | 方法 | 说明            |
+| --------------- | ---- | --------------- |
+| `/mcp`          | GET  | 列出 MCP 服务器 |
+| `/mcp/:id/tool` | GET  | 列出 MCP 工具   |
 
 ### 文件操作
 
-| 端点 | 方法 | 说明 |
-|------|------|------|
-| `/file` | GET | 读取文件 |
-| `/file` | PUT | 写入文件 |
-| `/file/list` | GET | 列出文件 |
+| 端点         | 方法 | 说明     |
+| ------------ | ---- | -------- |
+| `/file`      | GET  | 读取文件 |
+| `/file`      | PUT  | 写入文件 |
+| `/file/list` | GET  | 列出文件 |
 
 ### 终端 (PTY)
 
-| 端点 | 方法 | 说明 |
-|------|------|------|
+| 端点   | 方法      | 说明     |
+| ------ | --------- | -------- |
 | `/pty` | WebSocket | 终端连接 |
 
 ## 事件流 (SSE)
@@ -147,15 +147,15 @@ eventSource.onmessage = (event) => {
 
 ### 事件类型
 
-| 事件类型 | 说明 |
-|----------|------|
-| `server.connected` | 连接成功 |
-| `server.heartbeat` | 心跳 (每 30 秒) |
-| `session.created` | 会话创建 |
-| `session.updated` | 会话更新 |
-| `message.created` | 消息创建 |
-| `message.updated` | 消息更新 |
-| `message.part.updated` | 消息部分更新 |
+| 事件类型               | 说明            |
+| ---------------------- | --------------- |
+| `server.connected`     | 连接成功        |
+| `server.heartbeat`     | 心跳 (每 30 秒) |
+| `session.created`      | 会话创建        |
+| `session.updated`      | 会话更新        |
+| `message.created`      | 消息创建        |
+| `message.updated`      | 消息更新        |
+| `message.part.updated` | 消息部分更新    |
 
 ## CORS 配置
 
@@ -185,7 +185,7 @@ import { createOpencodeClient } from "@opencode-ai/sdk"
 
 const client = createOpencodeClient({
   baseUrl: "http://localhost:4096",
-  directory: "/path/to/project"
+  directory: "/path/to/project",
 })
 
 // 创建会话
@@ -193,7 +193,7 @@ const session = await client.session.create({})
 
 // 发送消息
 await client.session.chat(session.id, {
-  content: "Hello"
+  content: "Hello",
 })
 ```
 
@@ -214,7 +214,7 @@ import { createOpencode } from "@opencode-ai/sdk"
 // 自动启动 Server 并创建客户端
 const { client, server } = await createOpencode({
   port: 4096,
-  hostname: "127.0.0.1"
+  hostname: "127.0.0.1",
 })
 
 // 使用客户端
@@ -226,12 +226,12 @@ server.close()
 
 ## 关键源文件
 
-| 文件 | 说明 |
-|------|------|
+| 文件                                     | 说明          |
+| ---------------------------------------- | ------------- |
 | `packages/opencode/src/server/server.ts` | Server 主入口 |
-| `packages/opencode/src/cli/cmd/serve.ts` | serve 命令 |
-| `packages/opencode/src/server/routes/` | API 路由 |
-| `packages/opencode/src/server/event.ts` | 事件处理 |
+| `packages/opencode/src/cli/cmd/serve.ts` | serve 命令    |
+| `packages/opencode/src/server/routes/`   | API 路由      |
+| `packages/opencode/src/server/event.ts`  | 事件处理      |
 
 ## 下一步
 

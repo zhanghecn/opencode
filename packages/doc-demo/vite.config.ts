@@ -19,7 +19,7 @@ export default defineConfig({
               // Local src directory (higher priority)
               { find: "@/", replacement: docDemoSrc + "/" },
               { find: "@", replacement: docDemoSrc },
-              // App src directory  
+              // App src directory
               { find: "@app/", replacement: appSrc + "/" },
               { find: "@app", replacement: appSrc },
             ],

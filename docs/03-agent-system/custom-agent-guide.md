@@ -61,21 +61,21 @@ opencode.json                    # 项目配置文件
 
 ### 配置字段说明
 
-| 字段 | 类型 | 说明 |
-|------|------|------|
-| `name` | string | 显示名称 |
-| `description` | string | 代理描述，用于 LLM 选择 |
-| `mode` | string | `primary`/`subagent`/`all` |
-| `prompt` | string | 系统提示词 |
-| `temperature` | number | 温度参数 (0-1) |
-| `top_p` | number | Top-P 采样参数 |
-| `model` | string | 指定模型 (provider/model) |
-| `color` | string | UI 显示颜色 |
-| `hidden` | boolean | 是否隐藏 |
-| `steps` | number | 最大执行步数 |
-| `permission` | object | 权限配置 |
-| `options` | object | 额外选项 |
-| `disable` | boolean | 禁用此代理 |
+| 字段          | 类型    | 说明                       |
+| ------------- | ------- | -------------------------- |
+| `name`        | string  | 显示名称                   |
+| `description` | string  | 代理描述，用于 LLM 选择    |
+| `mode`        | string  | `primary`/`subagent`/`all` |
+| `prompt`      | string  | 系统提示词                 |
+| `temperature` | number  | 温度参数 (0-1)             |
+| `top_p`       | number  | Top-P 采样参数             |
+| `model`       | string  | 指定模型 (provider/model)  |
+| `color`       | string  | UI 显示颜色                |
+| `hidden`      | boolean | 是否隐藏                   |
+| `steps`       | number  | 最大执行步数               |
+| `permission`  | object  | 权限配置                   |
+| `options`     | object  | 额外选项                   |
+| `disable`     | boolean | 禁用此代理                 |
 
 ## 修改内置代理
 
@@ -142,7 +142,7 @@ Guidelines:
   temperature: 0.5,
   permission: {
     "*": "allow",
-    "bash": "ask",
+    bash: "ask",
   },
   options: {},
 }
@@ -185,9 +185,9 @@ Be constructive and specific in your feedback.`,
   temperature: 0.3,
   permission: {
     "*": "deny",
-    "read": "allow",
-    "grep": "allow",
-    "glob": "allow",
+    read: "allow",
+    grep: "allow",
+    glob: "allow",
   },
   options: {
     focus: ["security", "performance", "maintainability"],
@@ -222,10 +222,10 @@ Style guidelines:
   temperature: 0.5,
   permission: {
     "*": "deny",
-    "read": "allow",
-    "grep": "allow",
-    "glob": "allow",
-    "write": {
+    read: "allow",
+    grep: "allow",
+    glob: "allow",
+    write: {
       "*": "deny",
       "docs/**": "allow",
       "*.md": "allow",
@@ -322,10 +322,10 @@ export default {
 ```typescript
 export default {
   permission: {
-    "*": "deny",           // 默认拒绝
-    "read": "allow",       // 只开放需要的权限
-    "grep": "allow",
-    "glob": "allow",
+    "*": "deny", // 默认拒绝
+    read: "allow", // 只开放需要的权限
+    grep: "allow",
+    glob: "allow",
   },
 }
 ```
@@ -352,12 +352,13 @@ Describe expected output format`,
 ### 4. 合理的温度设置
 
 | 任务类型 | 推荐温度 |
-|----------|----------|
-| 代码生成 | 0.2-0.4 |
-| 代码审查 | 0.3-0.5 |
-| 创意写作 | 0.7-0.9 |
-| 文档生成 | 0.4-0.6 |
+| -------- | -------- |
+| 代码生成 | 0.2-0.4  |
+| 代码审查 | 0.3-0.5  |
+| 创意写作 | 0.7-0.9  |
+| 文档生成 | 0.4-0.6  |
 
 ## 下一步
+
 - [多代理协作模式](./multi-agent-patterns.md)
 - [技能系统详解](../04-skill-system/README.md)

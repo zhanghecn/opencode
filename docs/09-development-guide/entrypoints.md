@@ -5,19 +5,19 @@
 
 ## 总览表
 
-| 模块 | 入口文件 | 触发方式 | 说明 |
-| --- | --- | --- | --- |
-| CLI 主入口 | `packages/opencode/src/index.ts` | `bun dev` 或 `bun run --cwd packages/opencode dev` | yargs 注册命令，默认进入 TUI |
-| CLI 二进制壳 | `packages/opencode/bin/opencode` | `opencode` | 查找平台二进制并执行 |
-| TUI 线程 | `packages/opencode/src/cli/cmd/tui/thread.ts` | `opencode` / `bun dev` | 默认 `$0` 命令，启动 Worker 与 TUI |
-| TUI Worker | `packages/opencode/src/cli/cmd/tui/worker.ts` | 由 TUI 线程启动 | RPC 入口 + Server 启动入口 |
-| Server 主入口 | `packages/opencode/src/server/server.ts` | `opencode serve` 或 Worker 启动 | Hono app + 路由注册 |
-| App (Web UI) | `packages/app/src/entry.tsx` | `cd packages/app && bun dev` | Web 端 UI 渲染入口 |
-| Desktop (WebView) | `packages/desktop/src/index.tsx` | `cd packages/desktop && bun tauri dev` | 桌面端 WebView 入口 |
-| Desktop (Rust) | `packages/desktop/src-tauri/src/main.rs` | `bun tauri dev` | Tauri 原生入口 |
-| Console (Client) | `packages/console/app/src/entry-client.tsx` | `cd packages/console/app && bun dev` | SolidStart 客户端入口 |
-| Console (Server) | `packages/console/app/src/entry-server.tsx` | `cd packages/console/app && bun dev` | SolidStart 服务端入口 |
-| Web (Docs) | `packages/web/src/pages/[...slug].md.ts` | `cd packages/web && bun dev` | Astro 路由入口之一 |
+| 模块              | 入口文件                                      | 触发方式                                           | 说明                               |
+| ----------------- | --------------------------------------------- | -------------------------------------------------- | ---------------------------------- |
+| CLI 主入口        | `packages/opencode/src/index.ts`              | `bun dev` 或 `bun run --cwd packages/opencode dev` | yargs 注册命令，默认进入 TUI       |
+| CLI 二进制壳      | `packages/opencode/bin/opencode`              | `opencode`                                         | 查找平台二进制并执行               |
+| TUI 线程          | `packages/opencode/src/cli/cmd/tui/thread.ts` | `opencode` / `bun dev`                             | 默认 `$0` 命令，启动 Worker 与 TUI |
+| TUI Worker        | `packages/opencode/src/cli/cmd/tui/worker.ts` | 由 TUI 线程启动                                    | RPC 入口 + Server 启动入口         |
+| Server 主入口     | `packages/opencode/src/server/server.ts`      | `opencode serve` 或 Worker 启动                    | Hono app + 路由注册                |
+| App (Web UI)      | `packages/app/src/entry.tsx`                  | `cd packages/app && bun dev`                       | Web 端 UI 渲染入口                 |
+| Desktop (WebView) | `packages/desktop/src/index.tsx`              | `cd packages/desktop && bun tauri dev`             | 桌面端 WebView 入口                |
+| Desktop (Rust)    | `packages/desktop/src-tauri/src/main.rs`      | `bun tauri dev`                                    | Tauri 原生入口                     |
+| Console (Client)  | `packages/console/app/src/entry-client.tsx`   | `cd packages/console/app && bun dev`               | SolidStart 客户端入口              |
+| Console (Server)  | `packages/console/app/src/entry-server.tsx`   | `cd packages/console/app && bun dev`               | SolidStart 服务端入口              |
+| Web (Docs)        | `packages/web/src/pages/[...slug].md.ts`      | `cd packages/web && bun dev`                       | Astro 路由入口之一                 |
 
 ## CLI / TUI / Server 入口细节
 
@@ -81,8 +81,14 @@ GlobalBus.on("event", (event) => {
 
 export const rpc = {
   async fetch(input) {
-    const response = await Server.App().fetch(new Request(input.url, { method: input.method, headers: input.headers, body: input.body }))
-    return { status: response.status, headers: Object.fromEntries(response.headers.entries()), body: await response.text() }
+    const response = await Server.App().fetch(
+      new Request(input.url, { method: input.method, headers: input.headers, body: input.body }),
+    )
+    return {
+      status: response.status,
+      headers: Object.fromEntries(response.headers.entries()),
+      body: await response.text(),
+    }
   },
   async server(input) {
     server = Server.listen(input)

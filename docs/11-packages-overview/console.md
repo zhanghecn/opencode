@@ -33,24 +33,24 @@ Console 模块是 OpenCode 的管理控制台，用于用户管理、订阅计�
 
 ## 子模块
 
-| 子模块 | 包名 | 说明 |
-|--------|------|------|
-| app | `@opencode-ai/console-app` | 前端应用 |
-| core | `@opencode-ai/console-core` | 核心业务逻辑 |
-| function | - | 云函数 |
-| mail | `@opencode-ai/console-mail` | 邮件服务 |
-| resource | `@opencode-ai/console-resource` | 资源定义 |
+| 子模块   | 包名                            | 说明         |
+| -------- | ------------------------------- | ------------ |
+| app      | `@opencode-ai/console-app`      | 前端应用     |
+| core     | `@opencode-ai/console-core`     | 核心业务逻辑 |
+| function | -                               | 云函数       |
+| mail     | `@opencode-ai/console-mail`     | 邮件服务     |
+| resource | `@opencode-ai/console-resource` | 资源定义     |
 
 ## 技术栈
 
-| 技术 | 用途 |
-|------|------|
-| SolidStart | 全栈框架 |
-| SolidJS | 前端 UI |
+| 技术        | 用途       |
+| ----------- | ---------- |
+| SolidStart  | 全栈框架   |
+| SolidJS     | 前端 UI    |
 | Drizzle ORM | 数据库 ORM |
-| Stripe | 支付集成 |
-| OpenAuth | 认证服务 |
-| Cloudflare | 部署平台 |
+| Stripe      | 支付集成   |
+| OpenAuth    | 认证服务   |
+| Cloudflare  | 部署平台   |
 
 ## 目录结构
 
@@ -197,14 +197,14 @@ import { mysqlTable, varchar, timestamp } from "drizzle-orm/mysql-core"
 export const users = mysqlTable("users", {
   id: varchar("id", { length: 26 }).primaryKey(),
   email: varchar("email", { length: 255 }).notNull(),
-  createdAt: timestamp("created_at").defaultNow()
+  createdAt: timestamp("created_at").defaultNow(),
 })
 
 export const subscriptions = mysqlTable("subscriptions", {
   id: varchar("id", { length: 26 }).primaryKey(),
   userId: varchar("user_id", { length: 26 }).notNull(),
   plan: varchar("plan", { length: 50 }).notNull(),
-  status: varchar("status", { length: 20 }).notNull()
+  status: varchar("status", { length: 20 }).notNull(),
 })
 ```
 
@@ -224,7 +224,7 @@ export async function createCheckoutSession(userId: string, priceId: string) {
     line_items: [{ price: priceId, quantity: 1 }],
     mode: "subscription",
     success_url: `${process.env.APP_URL}/subscription/success`,
-    cancel_url: `${process.env.APP_URL}/subscription/cancel`
+    cancel_url: `${process.env.APP_URL}/subscription/cancel`,
   })
 }
 ```
@@ -264,12 +264,12 @@ sst deploy --stage production
 
 ## 环境变量
 
-| 变量 | 说明 |
-|------|------|
-| `VITE_AUTH_URL` | 认证服务 URL |
-| `VITE_STRIPE_PUBLISHABLE_KEY` | Stripe 公钥 |
-| `DATABASE_URL` | 数据库连接字符串 |
-| `STRIPE_SECRET_KEY` | Stripe 密钥 |
+| 变量                          | 说明             |
+| ----------------------------- | ---------------- |
+| `VITE_AUTH_URL`               | 认证服务 URL     |
+| `VITE_STRIPE_PUBLISHABLE_KEY` | Stripe 公钥      |
+| `DATABASE_URL`                | 数据库连接字符串 |
+| `STRIPE_SECRET_KEY`           | Stripe 密钥      |
 
 ## 下一步
 

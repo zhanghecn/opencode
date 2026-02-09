@@ -300,10 +300,7 @@ function isRetryableError(error: unknown): boolean {
 
 export namespace MessageV2 {
   // 转换为 AI SDK 消息格式
-  export function toModelMessages(
-    messages: WithParts[],
-    model: Provider.Model
-  ): CoreMessage[] {
+  export function toModelMessages(messages: WithParts[], model: Provider.Model): CoreMessage[] {
     return messages.map((msg) => {
       if (msg.info.role === "user") {
         return {
@@ -341,5 +338,6 @@ export namespace MessageV2 {
 ```
 
 ## 下一步
+
 - [工具系统详解](../02-tool-system/README.md)
 - [代理系统详解](../03-agent-system/README.md)

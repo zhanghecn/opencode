@@ -88,19 +88,22 @@ mkdir -p .opencode/skill/my-skill
 ```
 
 ```markdown
-<!-- .opencode/skill/my-skill/SKILL.md -->
----
+## <!-- .opencode/skill/my-skill/SKILL.md -->
+
 name: my-skill
 description: Use this when working on specific tasks
+
 ---
 
 # My Skill
 
 ## Guidelines
+
 - Guideline 1
 - Guideline 2
 
 ## Steps
+
 1. Step 1
 2. Step 2
 ```
@@ -196,9 +199,9 @@ Brief overview
   temperature: 0.3,
   permission: {
     "*": "deny",
-    "read": "allow",
-    "grep": "allow",
-    "glob": "allow",
+    read: "allow",
+    grep: "allow",
+    glob: "allow",
     "lint-check": "allow",
   },
 }
@@ -207,10 +210,11 @@ Brief overview
 ### 技能定义
 
 ```markdown
-<!-- .opencode/skill/code-review/SKILL.md -->
----
+## <!-- .opencode/skill/code-review/SKILL.md -->
+
 name: code-review
 description: Use this when reviewing code changes
+
 ---
 
 # Code Review Skill
@@ -218,20 +222,24 @@ description: Use this when reviewing code changes
 ## Checklist
 
 ### Code Quality
+
 - [ ] Code is readable
 - [ ] Functions are focused
 - [ ] No duplication
 
 ### Security
+
 - [ ] No hardcoded secrets
 - [ ] Input validation
 - [ ] SQL injection prevention
 
 ### Performance
+
 - [ ] Efficient algorithms
 - [ ] Proper caching
 
 ### Testing
+
 - [ ] Tests present
 - [ ] Edge cases covered
 ```
@@ -298,16 +306,19 @@ description: Use this when generating documentation
 # Documentation Generation
 
 ## Structure
+
 - README.md - Project overview
 - docs/api.md - API reference
 - docs/guide.md - User guide
 
 ## Style
+
 - Clear and concise
 - Include examples
 - Use proper markdown
 
 ## Process
+
 1. Analyze code structure
 2. Extract public APIs
 3. Generate documentation
@@ -427,5 +438,6 @@ description: Use this when generating documentation
 ```
 
 ## 下一步
+
 - [多智能体系统](./multi-agent-system.md)
 - [插件开发指南](../05-plugin-system/plugin-development.md)

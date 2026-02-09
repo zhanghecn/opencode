@@ -62,12 +62,7 @@ export default function DocUpload() {
   }
 
   return (
-    <div
-      class="flex items-center gap-2"
-      onDrop={handleDrop}
-      onDragOver={handleDragOver}
-      onDragLeave={handleDragLeave}
-    >
+    <div class="flex items-center gap-2" onDrop={handleDrop} onDragOver={handleDragOver} onDragLeave={handleDragLeave}>
       <input
         ref={inputRef}
         type="file"
@@ -88,13 +83,9 @@ export default function DocUpload() {
         </Show>
       </Button>
       <Show when={processor.state.error}>
-        <span class="text-12-regular text-color-danger">
-          Error: {processor.state.error}
-        </span>
+        <span class="text-12-regular text-color-danger">Error: {processor.state.error}</span>
       </Show>
-      <span class="text-11-regular text-color-tertiary">
-        PDF, PPT, Excel, Word, Images
-      </span>
+      <span class="text-11-regular text-color-tertiary">PDF, PPT, Excel, Word, Images</span>
     </div>
   )
 }
