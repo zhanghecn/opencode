@@ -5,7 +5,6 @@ import { describeRoute, generateSpecs, validator, resolver, openAPIRouteHandler 
 import { Hono } from "hono"
 import { cors } from "hono/cors"
 import { streamSSE } from "hono/streaming"
-import { proxy } from "hono/proxy"
 import { basicAuth } from "hono/basic-auth"
 import z from "zod"
 import { Provider } from "../provider/provider"
@@ -535,20 +534,26 @@ export namespace Server {
           },
         )
         .all("/*", async (c) => {
-          const path = c.req.path
+          // Proxy disabled: server only serves API responses.
+          // const path = c.req.path
+          // const response = await proxy(`https://app.opencode.ai${path}`, {
+          //   ...c.req,
+          //   headers: {
+          //     ...c.req.raw.headers,
+          //     host: "app.opencode.ai",
+          //   },
+          // })
+          // response.headers.set(
+          //   "Content-Security-Policy",
+          //   "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; media-src 'self' data:; connect-src 'self' data:",
+          // )
+          // return response
 
-          const response = await proxy(`https://app.opencode.ai${path}`, {
-            ...c.req,
-            headers: {
-              ...c.req.raw.headers,
-              host: "app.opencode.ai",
-            },
-          })
-          response.headers.set(
+          c.header(
             "Content-Security-Policy",
-            "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; media-src 'self' data:; connect-src 'self' data:",
+            "default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
           )
-          return response
+          return c.html(await Bun.file(new URL("./assets/404.html", import.meta.url)).text(), 404)
         }) as unknown as Hono,
   )
 

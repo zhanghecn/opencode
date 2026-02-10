@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>404 Not Found</title>
+    <style>
+      :root {
+        color-scheme: dark;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: radial-gradient(1200px 600px at 20% 10%, #0a1f14 0%, #050b08 60%, #030605 100%);
+        color: #a7ffb8;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New",
+          monospace;
+      }
+
+      main {
+        position: relative;
+        width: min(820px, 92vw);
+        border: 1px solid #2cff7a;
+        background: rgba(3, 8, 6, 0.92);
+        padding: 32px 36px 28px;
+        box-shadow: 0 0 0 1px rgba(44, 255, 122, 0.25), 0 20px 60px rgba(0, 0, 0, 0.6);
+        border-radius: 8px;
+        overflow: hidden;
+      }
+
+      main::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(
+          to bottom,
+          rgba(44, 255, 122, 0.07),
+          rgba(44, 255, 122, 0.07) 1px,
+          transparent 1px,
+          transparent 3px
+        );
+        pointer-events: none;
+        mix-blend-mode: screen;
+      }
+
+      header {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        color: #6cff9c;
+        font-size: 12px;
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+      }
+
+      .dot {
+        width: 10px;
+        height: 10px;
+        border-radius: 999px;
+        background: #2cff7a;
+        box-shadow: 0 0 12px rgba(44, 255, 122, 0.6);
+      }
+
+      h1 {
+        margin: 18px 0 8px;
+        font-size: clamp(48px, 10vw, 110px);
+        line-height: 0.9;
+        letter-spacing: 0.04em;
+      }
+
+      h2 {
+        margin: 0 0 16px;
+        font-size: 18px;
+        font-weight: 500;
+        text-transform: uppercase;
+        letter-spacing: 0.28em;
+        color: #6cff9c;
+      }
+
+      p {
+        margin: 0 0 14px;
+        font-size: 16px;
+        color: #b6ffc7;
+      }
+
+      .hint {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 10px 14px;
+        border: 1px solid rgba(44, 255, 122, 0.4);
+        border-radius: 6px;
+        background: rgba(9, 20, 14, 0.7);
+        color: #a7ffb8;
+        font-size: 14px;
+        text-decoration: none;
+      }
+
+      .hint span {
+        color: #6cff9c;
+      }
+
+      .cursor {
+        display: inline-block;
+        width: 10px;
+        height: 18px;
+        margin-left: 6px;
+        background: #2cff7a;
+        animation: blink 1s step-start infinite;
+        vertical-align: middle;
+      }
+
+      footer {
+        margin-top: 20px;
+        font-size: 13px;
+        color: #7feaa0;
+      }
+
+      @keyframes blink {
+        50% {
+          opacity: 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main data-appearance="terminal" aria-labelledby="title">
+      <header>
+        <span class="dot" aria-hidden="true"></span>
+        opencode server
+      </header>
+      <h1 id="title">404</h1>
+      <h2>Not Found</h2>
+      <p>This server only serves API endpoints.</p>
+      <p>Check the API docs or verify the requested path.</p>
+      <a class="hint" href="/docs"><span>GET</span> /docs</a>
+      <span class="cursor" aria-hidden="true"></span>
+      <footer>Connection closed.</footer>
+    </main>
+  </body>
+</html>
