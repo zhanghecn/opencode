@@ -534,26 +534,26 @@ export namespace Server {
           },
         )
         .all("/*", async (c) => {
-          // Proxy disabled: server only serves API responses.
-          // const path = c.req.path
-          // const response = await proxy(`https://app.opencode.ai${path}`, {
-          //   ...c.req,
-          //   headers: {
-          //     ...c.req.raw.headers,
-          //     host: "app.opencode.ai",
-          //   },
-          // })
-          // response.headers.set(
-          //   "Content-Security-Policy",
-          //   "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; media-src 'self' data:; connect-src 'self' data:",
-          // )
-          // return response
-
-          c.header(
+          Proxy disabled: server only serves API responses.
+          const path = c.req.path
+          const response = await proxy(`https://app.opencode.ai${path}`, {
+            ...c.req,
+            headers: {
+              ...c.req.raw.headers,
+              host: "app.opencode.ai",
+            },
+          })
+          response.headers.set(
             "Content-Security-Policy",
-            "default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
+            "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; media-src 'self' data:; connect-src 'self' data:",
           )
-          return c.html(await Bun.file(new URL("./assets/404.html", import.meta.url)).text(), 404)
+          return response
+
+          // c.header(
+          //   "Content-Security-Policy",
+          //   "default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
+          // )
+          // return c.html(await Bun.file(new URL("./assets/404.html", import.meta.url)).text(), 404)
         }) as unknown as Hono,
   )
 

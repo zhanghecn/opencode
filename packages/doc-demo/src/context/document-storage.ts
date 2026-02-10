@@ -26,6 +26,17 @@ const fromBytes = (bytes: Uint8Array) => {
   return out
 }
 
+const limit = 16000
+
+export const chunk = (value: string, size = limit) => {
+  if (!value) return [""]
+  const parts = []
+  for (let i = 0; i < value.length; i += size) {
+    parts.push(value.slice(i, i + size))
+  }
+  return parts
+}
+
 const quote = (path: string) => `'${path.replace(/'/g, `'\\''`)}'`
 
 const run = async (sdk: ReturnType<typeof createOpencodeClient>, id: string, command: string) => {
@@ -34,6 +45,20 @@ const run = async (sdk: ReturnType<typeof createOpencodeClient>, id: string, com
     agent: "build",
     command,
   })
+}
+
+const writeText = (path: string, value: string, size = limit) => {
+  const parts = chunk(value, size)
+  return [`: > ${quote(path)}`, ...parts.map((part) => `printf %s ${quote(part)} >> ${quote(path)}`)]
+}
+
+const writeBase64 = (path: string, data: string, size = limit) => {
+  const temp = `${path}.b64`
+  return [
+    ...writeText(temp, data, size),
+    `base64 --decode < ${quote(temp)} > ${quote(path)}`,
+    `rm -f ${quote(temp)}`,
+  ]
 }
 
 export const store = async (input: {
@@ -54,18 +79,19 @@ export const store = async (input: {
   if (!id) throw new Error("无法创建写入会话")
 
   await run(input.sdk, id, `mkdir -p ${quote(imageDir)}`)
-  await run(
-    input.sdk,
-    id,
-    `cat > ${quote(markdownPath)} <<'DOC_DEMO_MD'\n${input.markdown}\nDOC_DEMO_MD`,
-  )
+  for (const cmd of writeText(markdownPath, input.markdown)) {
+    await run(input.sdk, id, cmd)
+  }
 
   const images = await Promise.all(
     input.images.map(async (image) => {
       const path = `${imageDir}/${safe(image.path || "image.bin")}`
       const dir = path.split("/").slice(0, -1).join("/")
       const data = btoa(fromBytes(toBytes(image.url)))
-      await run(input.sdk, id, `mkdir -p ${quote(dir)} && printf %s ${quote(data)} | base64 --decode > ${quote(path)}`)
+      await run(input.sdk, id, `mkdir -p ${quote(dir)}`)
+      for (const cmd of writeBase64(path, data)) {
+        await run(input.sdk, id, cmd)
+      }
       return path
     }),
   )
