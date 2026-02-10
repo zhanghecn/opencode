@@ -2,7 +2,7 @@ import { createSimpleContext } from "@opencode-ai/ui/context"
 import { createStore } from "solid-js/store"
 import { createOpencodeClient } from "@opencode-ai/sdk/v2/client"
 import { useServer } from "./server-fixed"
-import { rules } from "./session-config"
+import { store } from "./document-storage"
 
 export interface ProcessedDocument {
   markdown: string
@@ -46,12 +46,6 @@ const exts = new Set([
   ".webp",
 ])
 
-const stem = (name: string) => {
-  const i = name.lastIndexOf(".")
-  if (i === -1) return name
-  return name.slice(0, i)
-}
-
 const ext = (name: string) => {
   const i = name.lastIndexOf(".")
   if (i === -1) return ""
@@ -59,15 +53,6 @@ const ext = (name: string) => {
 }
 
 const safe = (value: string) => value.replace(/[^a-zA-Z0-9._/-]/g, "_")
-
-const fromBytes = (bytes: Uint8Array) => {
-  let out = ""
-  const size = 0x8000
-  for (let i = 0; i < bytes.length; i += size) {
-    out += String.fromCharCode(...bytes.subarray(i, i + size))
-  }
-  return out
-}
 
 const mapImages = (mapping: ParseResult["image_mapping"]) => {
   if (!mapping) return [] as { path: string; url: string }[]
@@ -79,78 +64,15 @@ const mapImages = (mapping: ParseResult["image_mapping"]) => {
   )
 }
 
-const raw = (value: string) => {
-  const i = value.indexOf(",")
-  if (value.startsWith("data:") && i !== -1) return value.slice(i + 1)
-  return value
-}
+const parseBase = "/api"
 
-const toBytes = (value: string) => Uint8Array.from(atob(raw(value)), (char) => char.charCodeAt(0))
-
-const defaultApi =
-  typeof __DOC_PARSE_URL__ === "string" && __DOC_PARSE_URL__
-    ? __DOC_PARSE_URL__
-    : "http://192.168.0.211:1800/api/v1/parse"
-
-export const parseApi = (value: string) => {
-  const base = (value || "").trim().replace(/\/+$/, "") || defaultApi
+export const parseApi = (value?: string) => {
+  const raw = (value ?? "").trim()
+  const base = (raw ? raw : parseBase).replace(/\/+$/, "")
+  if (!base) return "/api/v1/parse"
   if (base.endsWith("/api/v1/parse")) return base
+  if (base.endsWith("/api")) return `${base}/v1/parse`
   return `${base}/api/v1/parse`
-}
-
-async function runCommand(sdk: ReturnType<typeof createOpencodeClient>, sessionID: string, command: string) {
-  await sdk.session.shell({
-    sessionID,
-    agent: "build",
-    command,
-  })
-}
-
-function quote(path: string) {
-  return `'${path.replace(/'/g, `'\\''`)}'`
-}
-
-async function writeWorkspace(input: {
-  sdk: ReturnType<typeof createOpencodeClient>
-  root: string
-  markdown: string
-  images: { path: string; url: string }[]
-  originalName: string
-  timestamp: string
-}) {
-  const base = `${input.root}/.doc-demo/parsed`
-  const folder = `${base}/${safe(stem(input.originalName) || "document")}-${input.timestamp}`
-  const imageDir = `${folder}/images`
-  const markdownPath = `${folder}/document.md`
-
-  const session = await input.sdk.session.create({ permission: rules(input.root) })
-  const sessionID = session.data?.id
-  if (!sessionID) throw new Error("无法创建写入会话")
-
-  await runCommand(input.sdk, sessionID, `mkdir -p ${quote(imageDir)}`)
-  await runCommand(
-    input.sdk,
-    sessionID,
-    `cat > ${quote(markdownPath)} <<'DOC_DEMO_MD'\n${input.markdown}\nDOC_DEMO_MD`,
-  )
-
-  const paths: string[] = []
-  for (const image of input.images) {
-    const path = `${imageDir}/${safe(image.path || "image.bin")}`
-    const dir = path.split("/").slice(0, -1).join("/")
-    const data = btoa(fromBytes(toBytes(image.url)))
-    await runCommand(
-      input.sdk,
-      sessionID,
-      `mkdir -p ${quote(dir)} && printf %s ${quote(data)} | base64 --decode > ${quote(path)}`,
-    )
-    paths.push(path)
-  }
-
-  return {
-    markdown: markdownPath,
-    images: paths,
-  }
 }
 
 export const { use: useDocumentProcessor, provider: DocumentProcessorProvider } = createSimpleContext({
@@ -177,7 +99,7 @@ export const { use: useDocumentProcessor, provider: DocumentProcessorProvider } 
           throw new Error(`不支持的文件类型：${file.name}`)
         }
 
-        const url = parseApi(import.meta.env.VITE_DOC_PARSE_API_URL)
+        const url = parseApi()
         const form = new FormData()
         form.append("file", file)
         setState("progress", 20)
@@ -212,7 +134,7 @@ export const { use: useDocumentProcessor, provider: DocumentProcessorProvider } 
 
         setState("progress", 80)
 
-        const saved = await writeWorkspace({
+        const saved = await store({
           sdk,
           root: server.directory,
           originalName: file.name,

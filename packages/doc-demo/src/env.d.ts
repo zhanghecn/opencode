@@ -14,5 +14,3 @@ interface ImportMetaEnv {
 interface ImportMeta {
   readonly env: ImportMetaEnv
 }
-
-declare const __DOC_PARSE_URL__: string | undefined
