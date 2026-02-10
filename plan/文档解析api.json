@@ -1,0 +1,232 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "文档解析器 API",
+    "description": "多格式文档解析接口，支持 PDF/Word/PPT/Excel/CSV/Markdown/TXT/图片，返回结构化 Markdown + 图片映射。",
+    "version": "v4.1.0"
+  },
+  "servers": [
+    {
+      "url": "http://192.168.0.211:1800"
+    }
+  ],
+  "paths": {
+    "/api/v1/parse": {
+      "post": {
+        "description": "解析文档文件，返回 Markdown 内容和图片映射。PDF/Word/PPT/图片默认使用 OCR，Excel/CSV/MD/TXT 始终标准解析。",
+        "operationId": "ParseDocument",
+        "parameters": [
+          {
+            "name": "use_ocr",
+            "in": "query",
+            "description": "是否使用 OCR（仅对 PDF/Word/PPT/图片生效，默认开启）",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": true
+            }
+          },
+          {
+            "name": "compress_images",
+            "in": "query",
+            "description": "是否压缩图片为 WebP 格式",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "required": ["file"],
+                "properties": {
+                  "file": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "文档文件（最大 50MB），支持 .pdf .docx .doc .pptx .ppt .xlsx .csv .md .txt .png .jpg .jpeg .bmp .tiff"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "解析成功",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ParseResult"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "请求无效（文件名为空或格式不支持）",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "413": {
+            "description": "文件超过 50MB",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "解析失败",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        },
+        "deprecated": false
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ParseResult": {
+        "type": "object",
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "description": "请求追踪 ID"
+          },
+          "status": {
+            "type": "string",
+            "description": "状态: success / error"
+          },
+          "processing_time_ms": {
+            "type": "integer",
+            "description": "处理耗时（毫秒）"
+          },
+          "document": {
+            "type": "object",
+            "description": "文档元信息",
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "文件名"
+              },
+              "type": {
+                "type": "string",
+                "description": "文件扩展名"
+              },
+              "pages": {
+                "type": "integer",
+                "description": "页数"
+              },
+              "parse_mode": {
+                "type": "string",
+                "description": "解析模式: ocr 或 standard"
+              },
+              "ocr_engine": {
+                "type": "string",
+                "description": "OCR 引擎名（仅 OCR 模式）"
+              }
+            }
+          },
+          "parse_mode": {
+            "type": "string",
+            "description": "实际解析模式: standard 或 ocr"
+          },
+          "markdown": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Markdown 内容（每页一个元素）"
+          },
+          "image_mapping": {
+            "description": "图片映射（路径→base64），单页为对象，多页为对象数组",
+            "oneOf": [
+              {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              }
+            ]
+          },
+          "layout_visualizations": {
+            "description": "布局可视化图（仅 OCR 模式有内容）",
+            "oneOf": [
+              {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": {
+                    "type": "string"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "request_id": {
+            "type": "string",
+            "description": "请求追踪 ID"
+          },
+          "status": {
+            "type": "string",
+            "description": "固定为 error"
+          },
+          "error": {
+            "type": "object",
+            "properties": {
+              "code": {
+                "type": "string",
+                "description": "错误代码: INVALID_REQUEST / UNSUPPORTED_FORMAT / FILE_TOO_LARGE / PARSE_FAILED / OCR_SERVICE_UNAVAILABLE / INTERNAL_ERROR"
+              },
+              "message": {
+                "type": "string",
+                "description": "错误消息"
+              },
+              "detail": {
+                "type": "string",
+                "description": "详细错误信息"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

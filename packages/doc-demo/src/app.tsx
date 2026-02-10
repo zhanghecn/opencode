@@ -1,6 +1,6 @@
 import "@/index.css"
-import { ErrorBoundary, Show, lazy, type ParentProps, createMemo, Suspense, createEffect } from "solid-js"
-import { Router, Route, Navigate, useNavigate } from "@solidjs/router"
+import { ErrorBoundary, Show, Suspense, lazy } from "solid-js"
+import { Navigate, Route, Router } from "@solidjs/router"
 import { MetaProvider } from "@solidjs/meta"
 import { Font } from "@opencode-ai/ui/font"
 import { MarkedProvider } from "@opencode-ai/ui/context/marked"
@@ -11,16 +11,11 @@ import { Diff } from "@opencode-ai/ui/diff"
 import { Code } from "@opencode-ai/ui/code"
 import { ThemeProvider } from "@opencode-ai/ui/theme"
 import { DialogProvider } from "@opencode-ai/ui/context/dialog"
-import { DataProvider } from "@opencode-ai/ui/context"
-import type { QuestionAnswer } from "@opencode-ai/sdk/v2"
-
-// Import from @opencode-ai/app (exported modules)
-import { PlatformProvider, type Platform, AppBaseProviders } from "@opencode-ai/app"
 
 // Local context
 import { ServerProvider, useServer } from "@/context/server-fixed"
 import { DocumentProcessorProvider } from "@/context/document-processor"
-import { GlobalSDKProvider, useGlobalSDK, GlobalSyncProvider, useGlobalSync } from "@/context/global"
+import { GlobalSDKProvider, GlobalSyncProvider } from "@/context/global"
 import SimplifiedLayout from "@/components/simplified-layout"
 
 // Lazy load session from app
@@ -69,8 +64,6 @@ function AppWithServer() {
 }
 
 function AppRouter() {
-  const server = useServer()
-
   return (
     <Router
       root={(routerProps) => (

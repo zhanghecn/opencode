@@ -1,7 +1,8 @@
 // @refresh reload
 import { render } from "solid-js/web"
 import App from "@/app"
-import { Platform, PlatformProvider } from "@app/context/platform"
+import type { Platform } from "@/types/platform"
+import { PlatformProvider } from "@/types/platform"
 import pkg from "../package.json"
 
 const root = document.getElementById("root")

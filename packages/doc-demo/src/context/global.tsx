@@ -1,9 +1,9 @@
 import { createOpencodeClient, type Event, type Config, type Path, type Project } from "@opencode-ai/sdk/v2/client"
 import { createSimpleContext } from "@opencode-ai/ui/context"
 import { createGlobalEmitter } from "@solid-primitives/event-bus"
-import { batch, createEffect, onCleanup, onMount, type ParentProps, Show, Match, Switch } from "solid-js"
+import { batch, onCleanup, onMount, type ParentProps, Match, Switch } from "solid-js"
 import { createContext, useContext, getOwner } from "solid-js"
-import { createStore, produce, reconcile } from "solid-js/store"
+import { createStore, produce } from "solid-js/store"
 import { useServer } from "./server-fixed"
 
 // GlobalSDKProvider - simplified version
@@ -79,7 +79,6 @@ type DirectoryStore = {
 
 function createGlobalSync() {
   const globalSDK = useGlobalSDK()
-  const server = useServer()
   const owner = getOwner()
   if (!owner) throw new Error("GlobalSync must be created within owner")
 
@@ -128,8 +127,8 @@ function createGlobalSync() {
 
       // Load initial data
       const [pathRes, agentRes, sessionRes] = await Promise.all([
-        sdk.global.path(),
-        sdk.agent.list(),
+        sdk.path.get(),
+        sdk.app.agents(),
         sdk.session.list({ limit: 20 }),
       ])
 
@@ -150,13 +149,13 @@ function createGlobalSync() {
   async function bootstrap() {
     try {
       const [pathRes, configRes, projectRes] = await Promise.all([
-        globalSDK.client.global.path(),
+        globalSDK.client.path.get(),
         globalSDK.client.global.config.get(),
         globalSDK.client.project.list(),
       ])
 
       batch(() => {
-        setGlobalStore("path", pathRes.data)
+        setGlobalStore("path", pathRes.data ?? { state: "", config: "", worktree: "", directory: "", home: "" })
         setGlobalStore("config", configRes.data ?? {})
         setGlobalStore("project", projectRes.data ?? [])
         setGlobalStore("ready", true)
@@ -185,7 +184,7 @@ function createGlobalSync() {
     // Handle directory events
     if (event.type === "session.created") {
       setStore("session", produce((draft: any[]) => {
-        const session = event.properties.session
+        const session = event.properties.info
         draft.push(session)
         draft.sort((a, b) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0)
       }))

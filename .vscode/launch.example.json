@@ -21,6 +21,23 @@
       },
       "console": "integratedTerminal",
       "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "doc-demo dev",
+      "type": "bun",
+      "request": "launch",
+      "runtime": "${env:HOME}/.bun/bin/bun",
+      "cwd": "${workspaceFolder}/packages/doc-demo",
+      "runtimeArgs": ["run", "dev"],
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "name": "doc-demo (chrome)",
+      "type": "pwa-chrome",
+      "request": "launch",
+      "url": "http://localhost:3001",
+      "webRoot": "${workspaceFolder}/packages/doc-demo"
     }
   ]
 }

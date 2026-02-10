@@ -1,7 +1,19 @@
 import { createSimpleContext } from "@opencode-ai/ui/context"
 import { createEffect, createMemo, onCleanup } from "solid-js"
 import { createStore } from "solid-js/store"
-import { checkServerHealth } from "@app/utils/server-health"
+
+async function checkServerHealth(url: string, fetcher: typeof fetch) {
+  try {
+    const response = await fetcher(`${url}/global/health`)
+    if (!response.ok) {
+      return { healthy: false }
+    }
+    const data = (await response.json()) as { healthy?: boolean }
+    return { healthy: data.healthy === true }
+  } catch {
+    return { healthy: false }
+  }
+}
 
 export function serverDisplayName(url: string) {
   if (!url) return ""

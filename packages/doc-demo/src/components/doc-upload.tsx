@@ -78,7 +78,7 @@ export default function DocUpload() {
         multiple
       />
       <Button
-        size="sm"
+        size="small"
         variant={isDragging() ? "primary" : "secondary"}
         onClick={() => inputRef?.click()}
         disabled={processor.state.processing}

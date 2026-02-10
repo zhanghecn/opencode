@@ -23,17 +23,16 @@ opencode 是一个通用智能体。
 并且可以定义 模型 和 agent 。
 还支持 plugin 和 skill 集成
 
-你不要盲目的使用 opencode server ,后续我会进行改造的,而且我并没有编译。
-
-sdk 是拥有 server 的。 而且我更多时候也会调试 server 修改源码。 你帮我想个办法,我并知道如何正规的运行这个项目。
-
+前后端分离 
+opencode serve 作为通用型智能体
+doc-demo 作为前端 并通过sdk client 构建专属文档写作智能体,并包含用户上传资料的收集
+你不要盲目的使用 opencode serve ,而是通过 当前代码库中的 bun run dev serve,这样我可以调试源码 甚至改造
 
 # 深入了解代码
 opencode 中的 
-sdk core tool plugin skills 
+sdk core tool plugin skills  serve
 
-只有了解这些 你才知道如何配置自定义agent 
-
+只有了解这些 你才知道如何配置自定义agent 。并前后端分离。
 
 
 # 实现要求 
@@ -69,72 +68,8 @@ opencode web 是 自动启动一个 server 但我这里不允许,我需要的是
 ### 文档处理 
 所有 文档建议都提前处理成 markdown,方便检索。
 
-关于 pdf 解析,需要借助到 paddle-v1.5 下面是示例代码:
-```
-# Please make sure the requests library is installed
-# pip install requests
-import base64
-import os
-import requests
-
-API_URL = "https://k8gdt1ufl572x978.aistudio-app.com/layout-parsing"
-TOKEN = "fe241ccb20bf0c4856b0c8063e4aff1abe7305dd"
-
-file_path = "<local file path>"
-
-with open(file_path, "rb") as file:
-    file_bytes = file.read()
-    file_data = base64.b64encode(file_bytes).decode("ascii")
-
-headers = {
-    "Authorization": f"token {TOKEN}",
-    "Content-Type": "application/json"
-}
-
-required_payload = {
-    "file": file_data,
-    "fileType": <file type>,  # For PDF documents, set `fileType` to 0; for images, set `fileType` to 1
-}
-
-optional_payload = {
-    "useDocOrientationClassify": False,
-    "useDocUnwarping": False,
-    "useChartRecognition": False,
-}
-
-payload = {**required_payload, **optional_payload}
-
-response = requests.post(API_URL, json=payload, headers=headers)
-print(response.status_code)
-assert response.status_code == 200
-result = response.json()["result"]
-
-output_dir = "output"
-os.makedirs(output_dir, exist_ok=True)
-
-for i, res in enumerate(result["layoutParsingResults"]):
-    md_filename = os.path.join(output_dir, f"doc_{i}.md")
-    with open(md_filename, "w") as md_file:
-        md_file.write(res["markdown"]["text"])
-    print(f"Markdown document saved at {md_filename}")
-    for img_path, img in res["markdown"]["images"].items():
-        full_img_path = os.path.join(output_dir, img_path)
-        os.makedirs(os.path.dirname(full_img_path), exist_ok=True)
-        img_bytes = requests.get(img).content
-        with open(full_img_path, "wb") as img_file:
-            img_file.write(img_bytes)
-        print(f"Image saved to: {full_img_path}")
-    for img_name, img in res["outputImages"].items():
-        img_response = requests.get(img)
-        if img_response.status_code == 200:
-            # Save image to local
-            filename = os.path.join(output_dir, f"{img_name}_{i}.jpg")
-            with open(filename, "wb") as f:
-                f.write(img_response.content)
-            print(f"Image saved to: {filename}")
-        else:
-            print(f"Failed to download image, status code: {img_response.status_code}")
-```
+关于 pdf 解析,需要借助到 工具api 需要参考 
+``文档解析api.json``
 
 它可以 转成 markdown 并能够提取出 图片 。 您需要先将他们自动解析放在文件系统中
 
