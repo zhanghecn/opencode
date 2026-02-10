@@ -5,6 +5,7 @@ import { createStore } from "solid-js/store"
 import { useServer } from "@/context/server-fixed"
 import { useGlobalSDK, useGlobalSync } from "@/context/global"
 import { useDocumentProcessor } from "@/context/document-processor"
+import { parseModel, parseVariant, rules } from "@/context/session-config"
 import { Button } from "@opencode-ai/ui/button"
 import { Markdown } from "@opencode-ai/ui/markdown"
 import { showToast } from "@opencode-ai/ui/toast"
@@ -20,6 +21,14 @@ const byID = (a: { id: string }, b: { id: string }) => (a.id < b.id ? -1 : a.id 
 
 const byPath = (a: { path: string }, b: { path: string }) =>
   a.path < b.path ? -1 : a.path > b.path ? 1 : 0
+
+const states = {
+  completed: "完成",
+  running: "执行中",
+  pending: "等待中",
+  queued: "排队中",
+  failed: "失败",
+} as const
 
 export default function SessionPage() {
   const params = useParams()
@@ -76,7 +85,7 @@ export default function SessionPage() {
       .map((item) => {
         if (item.type === "tool") {
           const name = item.state.status === "running" && item.state.title ? item.state.title : item.tool
-          const done = item.state.status === "completed" ? "done" : item.state.status
+          const detail = states[item.state.status as keyof typeof states] ?? item.state.status
           const files =
             item.state.status === "completed"
               ? (item.state.attachments ?? [])
@@ -89,8 +98,8 @@ export default function SessionPage() {
               : []
           return {
             id: item.id,
-            label: `Tool · ${name}`,
-            detail: done,
+            label: `工具 · ${name}`,
+            detail,
             files,
           }
         }
@@ -98,8 +107,8 @@ export default function SessionPage() {
         if (item.type === "patch") {
           return {
             id: item.id,
-            label: "Patch",
-            detail: `${item.files.length} file(s) updated`,
+            label: "补丁",
+            detail: `已更新 ${item.files.length} 个文件`,
             files: item.files,
           }
         }
@@ -108,7 +117,7 @@ export default function SessionPage() {
           const path = item.source && item.source.type !== "resource" ? item.source.path : undefined
           return {
             id: item.id,
-            label: "File",
+            label: "文件",
             detail: item.filename ?? path ?? item.url,
             files: path ? [path] : [],
           }
@@ -117,7 +126,7 @@ export default function SessionPage() {
         if (item.type === "subtask") {
           return {
             id: item.id,
-            label: "Subtask",
+            label: "子任务",
             detail: item.description || item.prompt,
             files: [],
           }
@@ -126,8 +135,8 @@ export default function SessionPage() {
         if (item.type === "step-start") {
           return {
             id: item.id,
-            label: "Step",
-            detail: "started",
+            label: "步骤",
+            detail: "开始",
             files: [],
           }
         }
@@ -135,8 +144,8 @@ export default function SessionPage() {
         if (item.type === "step-finish") {
           return {
             id: item.id,
-            label: "Step",
-            detail: `finished · ${item.reason}`,
+            label: "步骤",
+            detail: `完成 · ${item.reason}`,
             files: [],
           }
         }
@@ -144,7 +153,7 @@ export default function SessionPage() {
         if (item.type === "agent") {
           return {
             id: item.id,
-            label: "Agent",
+            label: "智能体",
             detail: item.name,
             files: [],
           }
@@ -158,7 +167,7 @@ export default function SessionPage() {
   // Create new session
   const createSession = async () => {
     try {
-      const response = await sdk().session.create({})
+      const response = await sdk().session.create({ permission: rules(directory()) })
       const session = response.data
       if (session) {
         setLocalState("currentSessionID", session.id)
@@ -167,7 +176,7 @@ export default function SessionPage() {
         await loadMessages(session.id)
       }
     } catch (e) {
-      showToast({ variant: "error", title: "Failed to create session", description: String(e) })
+      showToast({ variant: "error", title: "创建会话失败", description: String(e) })
     }
   }
 
@@ -196,7 +205,7 @@ export default function SessionPage() {
         )
       }
     } catch (e) {
-      console.error("Failed to load messages:", e)
+      console.error("加载消息失败:", e)
     }
   }
 
@@ -215,7 +224,7 @@ export default function SessionPage() {
       setView("openType", data.type)
       setView("openText", data.content)
     } catch (e) {
-      showToast({ variant: "error", title: "Failed to open file", description: String(e) })
+      showToast({ variant: "error", title: "打开文件失败", description: String(e) })
       setView("openType", "")
     } finally {
       setView("openLoading", false)
@@ -253,7 +262,7 @@ export default function SessionPage() {
         await openFile(files[0].path)
       }
     } catch (e) {
-      showToast({ variant: "error", title: "Failed to list files", description: String(e) })
+      showToast({ variant: "error", title: "读取文件列表失败", description: String(e) })
       setView("files", [])
     } finally {
       setView("filesLoading", false)
@@ -278,25 +287,27 @@ export default function SessionPage() {
     setLocalState("input", "")
 
     try {
-      // Add documents context if available
-      let messageContent = input
-      if (processor.state.documents.length > 0) {
-        const docContext = processor.state.documents
-          .map(d => `## Document: ${d.originalName}\n\n${d.markdown}`)
-          .join("\n\n---\n\n")
-        messageContent = `${input}\n\n---\n\n### Uploaded Documents:\n\n${docContext}`
-      }
+      const docs = processor.state.documents
+      const context =
+        docs.length > 0
+          ? docs.map((doc) => `## 文档：${doc.originalName}\n\n${doc.markdown}`).join("\n\n---\n\n")
+          : ""
+      const messageContent = context ? `${input}\n\n---\n\n### 已上传文档：\n\n${context}` : input
+      const model = parseModel(import.meta.env.VITE_DEFAULT_MODEL)
+      const variant = parseVariant(import.meta.env.VITE_DEFAULT_VARIANT)
 
       await sdk().session.prompt({
         sessionID,
+        variant,
         parts: [{ type: "text", text: messageContent }],
+        ...(model ? { model } : {}),
       })
 
       // Reload messages
       await loadMessages(sessionID)
       await loadFiles()
     } catch (e) {
-      showToast({ variant: "error", title: "Failed to send message", description: String(e) })
+      showToast({ variant: "error", title: "发送消息失败", description: String(e) })
     } finally {
       setLocalState("sending", false)
     }
@@ -320,33 +331,41 @@ export default function SessionPage() {
   })
 
   return (
-    <div class="grid h-full min-h-0 grid-cols-[minmax(0,1fr)_minmax(0,1fr)_320px]">
-      <section class="flex min-h-0 min-w-0 flex-col border-r border-border-base">
+    <div class="grid h-full min-h-0 grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)_320px] bg-background-secondary">
+      <section class="flex min-h-0 min-w-0 flex-col border-r border-border-weak-base bg-background-base">
+        <div class="flex items-center justify-between border-b border-border-weak-base px-4 py-2">
+          <span class="text-12-semibold text-text-strong">对话</span>
+          <Show when={processor.state.documents.length > 0}>
+            <span class="text-11-regular text-text-weak">
+              已准备 {processor.state.documents.length} 个文档
+            </span>
+          </Show>
+        </div>
         <div class="flex-1 overflow-y-auto p-4 space-y-4">
           <Show when={!localState.currentSessionID}>
-            <div class="flex flex-col items-center justify-center h-full gap-4">
-              <h2 class="text-18-semibold text-color-primary">Welcome to Doc Demo</h2>
-              <p class="text-color-secondary">Upload documents and start chatting with AI</p>
-              <Button onClick={createSession}>Start New Session</Button>
+            <div class="flex flex-col items-center justify-center h-full gap-4 text-center">
+              <h2 class="text-18-semibold text-text-strong">欢迎使用 Doc Demo</h2>
+              <p class="text-text-weak">上传文档并开始提问</p>
+              <Button onClick={createSession}>新建会话</Button>
             </div>
           </Show>
 
           <Show when={localState.currentSessionID}>
             <Show when={messages().length === 0}>
-              <div class="text-center text-color-tertiary py-8">No messages yet. Start the conversation!</div>
+              <div class="text-center text-text-weak py-8">暂无消息，开始对话吧。</div>
             </Show>
 
             <For each={messages()}>
               {(message) => (
                 <div
-                  class={`p-4 rounded-lg ${
+                  class={`rounded-xl border border-border-weak-base px-4 py-3 ${
                     message.role === "user"
-                      ? "bg-background-secondary ml-8"
-                      : "bg-background-tertiary mr-8"
+                      ? "bg-surface-base ml-8"
+                      : "bg-background-secondary mr-8"
                   }`}
                 >
-                  <div class="text-11-regular text-color-tertiary mb-2">
-                    {message.role === "user" ? "You" : "Assistant"}
+                  <div class="text-11-regular text-text-weak mb-2">
+                    {message.role === "user" ? "你" : "智能体"}
                   </div>
                   <For each={(getParts(message.id) as Part[]).filter((part) => part.type === "text")}>
                     {(part) => (
@@ -361,15 +380,7 @@ export default function SessionPage() {
           </Show>
         </div>
 
-        <Show when={processor.state.documents.length > 0}>
-          <div class="px-4 py-2 bg-background-secondary border-t border-border-base">
-            <div class="text-11-regular text-color-secondary">
-              {processor.state.documents.length} document(s) ready for context
-            </div>
-          </div>
-        </Show>
-
-        <div class="p-4 border-t border-border-base">
+        <div class="p-4 border-t border-border-weak-base bg-background-base">
           <div class="flex gap-2">
             <textarea
               value={localState.input}
@@ -380,34 +391,36 @@ export default function SessionPage() {
                   sendMessage()
                 }
               }}
-              placeholder="Type your message... (Shift+Enter for new line)"
-              class="flex-1 resize-none rounded-lg border border-border-base bg-background-base p-3 text-14-regular focus:border-color-primary focus:outline-none"
+              placeholder="输入你的问题…（Shift+Enter 换行）"
+              class="flex-1 resize-none rounded-lg border border-border-weak-base bg-background-base p-3 text-14-regular text-text-strong focus:border-border-base focus:outline-none"
               rows={3}
               disabled={localState.sending}
             />
             <Button onClick={sendMessage} disabled={localState.sending || !localState.input.trim()}>
-              {localState.sending ? "Sending..." : "Send"}
+              {localState.sending ? "发送中..." : "发送"}
             </Button>
           </div>
         </div>
       </section>
 
-      <section class="flex min-h-0 min-w-0 flex-col border-r border-border-base">
-        <div class="border-b border-border-base p-3 text-12-semibold text-color-primary">Execution Flow</div>
+      <section class="flex min-h-0 min-w-0 flex-col border-r border-border-weak-base bg-background-base">
+        <div class="border-b border-border-weak-base bg-background-secondary p-3 text-12-semibold text-text-strong">
+          执行流程
+        </div>
         <div class="flex-1 min-h-0 overflow-y-auto p-3 space-y-2">
-          <Show when={flow().length > 0} fallback={<div class="text-12-regular text-color-tertiary">No execution flow yet.</div>}>
+          <Show when={flow().length > 0} fallback={<div class="text-12-regular text-text-weak">暂无执行记录。</div>}>
             <For each={flow()}>
               {(item) => (
-                <div class="rounded-md border border-border-base bg-background-secondary p-2">
-                  <div class="text-12-semibold text-color-primary">{item.label}</div>
-                  <div class="text-11-regular text-color-secondary mt-1">{item.detail}</div>
+                <div class="rounded-md border border-border-weak-base bg-background-base p-2">
+                  <div class="text-12-semibold text-text-strong">{item.label}</div>
+                  <div class="text-11-regular text-text-weak mt-1">{item.detail}</div>
                   <Show when={item.files.length > 0}>
                     <div class="mt-2 flex flex-wrap gap-1">
                       <For each={item.files}>
                         {(path) => (
                           <button
                             type="button"
-                            class="rounded border border-border-base px-2 py-0.5 text-11-regular text-color-primary hover:bg-background-tertiary"
+                            class="rounded border border-border-weak-base px-2 py-0.5 text-11-regular text-text-strong hover:bg-background-secondary"
                             onClick={() => openFile(path)}
                           >
                             {path}
@@ -422,36 +435,44 @@ export default function SessionPage() {
           </Show>
         </div>
 
-        <div class="border-t border-border-base p-3 text-12-semibold text-color-primary">File Preview</div>
+        <div class="border-t border-border-weak-base bg-background-secondary p-3 text-12-semibold text-text-strong">
+          文件预览
+        </div>
         <div class="h-[45%] min-h-0 overflow-y-auto p-3">
-          <Show when={view.openPath} fallback={<div class="text-12-regular text-color-tertiary">Choose a file to preview.</div>}>
-            <div class="text-11-regular text-color-tertiary mb-2">{view.openPath}</div>
-            <Show when={view.openLoading} fallback={
-              <Show when={view.openType === "binary"} fallback={<pre class="text-11-regular whitespace-pre-wrap break-words text-color-primary">{view.openText}</pre>}>
-                <div class="text-12-regular text-color-tertiary">Binary file preview is not supported.</div>
-              </Show>
-            }>
-              <div class="text-12-regular text-color-tertiary">Loading file...</div>
+          <Show when={view.openPath} fallback={<div class="text-12-regular text-text-weak">选择文件以预览。</div>}>
+            <div class="text-11-regular text-text-weak mb-2">{view.openPath}</div>
+            <Show
+              when={view.openLoading}
+              fallback={
+                <Show
+                  when={view.openType === "binary"}
+                  fallback={<pre class="text-11-regular whitespace-pre-wrap break-words text-text-strong">{view.openText}</pre>}
+                >
+                  <div class="text-12-regular text-text-weak">暂不支持二进制文件预览。</div>
+                </Show>
+              }
+            >
+              <div class="text-12-regular text-text-weak">正在加载文件...</div>
             </Show>
           </Show>
         </div>
       </section>
 
-      <aside class="flex min-h-0 min-w-0 flex-col">
-        <div class="flex items-center justify-between border-b border-border-base p-3">
-          <span class="text-12-semibold text-color-primary">All Files</span>
+      <aside class="flex min-h-0 min-w-0 flex-col bg-background-base">
+        <div class="flex items-center justify-between border-b border-border-weak-base bg-background-secondary p-3">
+          <span class="text-12-semibold text-text-strong">所有文件</span>
           <Button size="small" variant="secondary" onClick={loadFiles} disabled={view.filesLoading}>
-            {view.filesLoading ? "Loading..." : "Reload"}
+            {view.filesLoading ? "加载中..." : "刷新"}
           </Button>
         </div>
         <div class="flex-1 min-h-0 overflow-y-auto p-2 space-y-1">
-          <Show when={view.files.length > 0} fallback={<div class="text-12-regular text-color-tertiary p-2">No files found.</div>}>
+          <Show when={view.files.length > 0} fallback={<div class="text-12-regular text-text-weak p-2">暂无文件。</div>}>
             <For each={view.files}>
               {(item) => (
                 <button
                   type="button"
                   class={`block w-full rounded px-2 py-1 text-left text-11-regular hover:bg-background-secondary ${
-                    view.openPath === item.path ? "bg-background-secondary text-color-primary" : "text-color-secondary"
+                    view.openPath === item.path ? "bg-background-secondary text-text-strong" : "text-text-weak"
                   }`}
                   onClick={() => openFile(item.path)}
                 >

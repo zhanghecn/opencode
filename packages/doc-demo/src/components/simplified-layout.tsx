@@ -1,4 +1,5 @@
 import { ParentProps, Show } from "solid-js"
+import { Mark } from "@opencode-ai/ui/logo"
 import { useServer } from "@/context/server-fixed"
 import DocUpload from "./doc-upload"
 
@@ -7,33 +8,29 @@ export default function SimplifiedLayout(props: ParentProps) {
 
   return (
     <div class="flex flex-col h-screen bg-background-base">
-      {/* Simplified header */}
-      <header class="h-12 border-b border-border-base flex items-center px-4 justify-between shrink-0">
+      <header class="h-12 border-b border-border-weak-base bg-background-base flex items-center px-4 justify-between shrink-0">
         <div class="flex items-center gap-3">
-          <span class="text-14-semibold text-color-primary">Doc Demo</span>
-          <Show when={server.healthy() === false}>
-            <span class="text-color-danger text-12-regular flex items-center gap-1">
+          <Mark class="size-5 text-text-strong" />
+          <span class="text-14-semibold text-text-strong">Doc Demo</span>
+          <div class="flex items-center gap-2 rounded-full border border-border-weak-base bg-background-secondary px-2 py-1 text-11-regular text-text-weak">
+            <Show when={server.healthy() === false}>
               <span class="w-2 h-2 rounded-full bg-color-danger" />
-              Server Offline
-            </span>
-          </Show>
-          <Show when={server.healthy() === true}>
-            <span class="text-color-success text-12-regular flex items-center gap-1">
+              <span>离线</span>
+            </Show>
+            <Show when={server.healthy() === true}>
               <span class="w-2 h-2 rounded-full bg-color-success" />
-              Connected
-            </span>
-          </Show>
-          <Show when={server.healthy() === undefined}>
-            <span class="text-color-secondary text-12-regular flex items-center gap-1">
+              <span>已连接</span>
+            </Show>
+            <Show when={server.healthy() === undefined}>
               <span class="w-2 h-2 rounded-full bg-color-secondary animate-pulse" />
-              Connecting...
-            </span>
-          </Show>
+              <span>连接中</span>
+            </Show>
+          </div>
         </div>
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-3">
           <DocUpload />
-          <span class="text-12-regular text-color-tertiary">
-            {server.directory}
+          <span class="text-11-regular text-text-weak truncate max-w-80">
+            目录：{server.directory}
           </span>
         </div>
       </header>

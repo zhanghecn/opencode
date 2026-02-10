@@ -5,12 +5,20 @@ import { Button } from "@opencode-ai/ui/button"
 
 const ACCEPTED_TYPES = [
   "application/pdf",
+  "application/msword",
   "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+  "application/vnd.ms-powerpoint",
   "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+  "application/vnd.ms-excel",
   "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+  "text/csv",
+  "text/markdown",
+  "text/plain",
   "image/png",
   "image/jpeg",
   "image/webp",
+  "image/bmp",
+  "image/tiff",
 ].join(",")
 
 export default function DocUpload() {
@@ -26,14 +34,14 @@ export default function DocUpload() {
         const doc = await processor.processDocument(file)
         showToast({
           variant: "success",
-          title: "Document Processed",
-          description: `${doc.originalName} has been converted to markdown.`,
+          title: "解析完成",
+          description: `${doc.originalName} 已转换为 Markdown。`,
         })
       } catch (err) {
         showToast({
           variant: "error",
-          title: "Processing Failed",
-          description: err instanceof Error ? err.message : "Unknown error",
+          title: "解析失败",
+          description: err instanceof Error ? err.message : "未知错误",
         })
       }
     }
@@ -83,17 +91,17 @@ export default function DocUpload() {
         onClick={() => inputRef?.click()}
         disabled={processor.state.processing}
       >
-        <Show when={processor.state.processing} fallback="Upload Document">
-          Processing... {processor.state.progress}%
+        <Show when={processor.state.processing} fallback="上传文档">
+          解析中... {processor.state.progress}%
         </Show>
       </Button>
       <Show when={processor.state.error}>
         <span class="text-12-regular text-color-danger">
-          Error: {processor.state.error}
+          错误：{processor.state.error}
         </span>
       </Show>
-      <span class="text-11-regular text-color-tertiary">
-        PDF, PPT, Excel, Word, Images
+      <span class="text-11-regular text-text-weak">
+        支持 PDF / PPT / Excel / Word / 图片
       </span>
     </div>
   )

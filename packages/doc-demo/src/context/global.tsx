@@ -241,12 +241,12 @@ export function GlobalSyncProvider(props: ParentProps) {
       </Match>
       <Match when={value.error}>
         <div class="flex items-center justify-center h-screen">
-          <p class="text-color-danger">Failed to connect: {value.error?.message}</p>
+          <p class="text-color-danger">连接失败：{value.error?.message}</p>
         </div>
       </Match>
       <Match when={!value.ready}>
         <div class="flex items-center justify-center h-screen">
-          <p class="text-color-secondary">Connecting to server...</p>
+          <p class="text-text-weak">正在连接服务器...</p>
         </div>
       </Match>
     </Switch>
