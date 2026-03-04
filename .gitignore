@@ -31,3 +31,4 @@ tsconfig.tsbuildinfo
 .pnpm-store
 __pycache__
 .gradle
+/deer-flow
