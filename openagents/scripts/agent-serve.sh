@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Start opencode serve for a specific agent, with plugins integrated.
+# Start openagents runtime for a specific agent.
 #
 # Usage:
 #   ./scripts/agent-serve.sh <agent_name> [--env dev|prod] [--port 4096]
@@ -7,12 +7,6 @@
 # Examples:
 #   ./scripts/agent-serve.sh demo-assistant
 #   ./scripts/agent-serve.sh researcher --env prod --port 4097
-#
-# The script:
-#   1. Loads .env / .env.example for API keys
-#   2. Creates plugins/ symlink in the agent directory (for auto-discovery)
-#   3. Sets OPENAGENT_NAME for tracing
-#   4. Starts opencode serve in the agent's working directory
 
 set -euo pipefail
 
@@ -35,7 +29,6 @@ while [[ $# -gt 0 ]]; do
 done
 
 AGENT_DIR="$ROOT_DIR/agents/$ENV/$AGENT_NAME"
-PLUGIN_DIR="$ROOT_DIR/plugins/openagent-plugin/src"
 
 if [[ ! -d "$AGENT_DIR" ]]; then
   echo "Error: Agent directory not found: $AGENT_DIR"
@@ -53,19 +46,9 @@ elif [[ -f "$ROOT_DIR/.env.example" ]]; then
   set -a; source "$ROOT_DIR/.env.example"; set +a
 fi
 
-# Create plugins/ symlink inside .opencode/ for opencode auto-discovery
-# opencode scans .opencode/{plugin,plugins}/*.{ts,js}
-AGENT_PLUGINS_DIR="$AGENT_DIR/.opencode/plugins"
-mkdir -p "$AGENT_DIR/.opencode"
-if [[ ! -L "$AGENT_PLUGINS_DIR" ]]; then
-  rm -rf "$AGENT_PLUGINS_DIR"
-  ln -sf "$PLUGIN_DIR" "$AGENT_PLUGINS_DIR"
-  echo "Linked plugins: $PLUGIN_DIR -> $AGENT_PLUGINS_DIR"
-fi
-
-# Export tracing environment
+# Export runtime environment
 export OPENAGENT_NAME="$AGENT_NAME"
-export OPENAGENT_PLUGIN_PATH="$PLUGIN_DIR/index.ts"
+export OPENAGENT_PORT="$PORT"
 export OPENCODE_CLIENT=sdk
 
 echo ""
@@ -80,4 +63,4 @@ echo "========================================"
 echo ""
 
 cd "$AGENT_DIR"
-exec opencode serve --port "$PORT"
+exec bun run "$ROOT_DIR/runtime/src/index.ts"

@@ -1,4 +1,4 @@
-.PHONY: build run dev db-up db-down migrate gateway agent-serve agent-list
+.PHONY: build run dev db-up db-down migrate gateway agent-serve agent-debug agent-list runtime-dev runtime-debug
 
 # Start PostgreSQL
 db-up:
@@ -26,31 +26,29 @@ up:
 down:
 	docker compose down
 
-# --- Agent debugging ---
+# --- Agent management ---
 
-# Start opencode serve for a specific agent (directly, no gateway needed)
+# Start runtime for a specific agent
 # Usage: make agent-serve AGENT=demo-assistant [ENV=dev] [PORT=4096]
 agent-serve:
 	@./scripts/agent-serve.sh $(AGENT) --env $(or $(ENV),dev) --port $(or $(PORT),4096)
+
+# Start runtime with Bun inspector for debugging
+# Usage: make agent-debug AGENT=demo-assistant [ENV=dev] [PORT=4096]
+agent-debug:
+	@./scripts/agent-debug.sh $(AGENT) --env $(or $(ENV),dev) --port $(or $(PORT),4096)
 
 # List available agents
 agent-list:
 	@echo "=== dev agents ===" && ls -1 agents/dev/ 2>/dev/null || echo "(none)"
 	@echo "=== prod agents ===" && ls -1 agents/prod/ 2>/dev/null || echo "(none)"
 
-# Setup plugins symlinks for all agents (inside .opencode/plugins/ for auto-discovery)
-agent-setup:
-	@for agent_dir in agents/dev/*/; do \
-		if [ -d "$$agent_dir" ]; then \
-			mkdir -p "$$agent_dir/.opencode" && \
-			ln -sfn "$$(pwd)/plugins/openagent-plugin/src" "$$agent_dir/.opencode/plugins" && \
-			echo "Linked plugins for $$(basename $$agent_dir)"; \
-		fi \
-	done
-	@for agent_dir in agents/prod/*/; do \
-		if [ -d "$$agent_dir" ]; then \
-			mkdir -p "$$agent_dir/.opencode" && \
-			ln -sfn "$$(pwd)/plugins/openagent-plugin/src" "$$agent_dir/.opencode/plugins" && \
-			echo "Linked plugins for $$(basename $$agent_dir) (prod)"; \
-		fi \
-	done
+# --- Runtime development ---
+
+# Run runtime in watch mode (auto-restart on changes)
+runtime-dev:
+	cd runtime && bun --watch run src/index.ts
+
+# Run runtime with Bun inspector
+runtime-debug:
+	cd runtime && bun --inspect run src/index.ts

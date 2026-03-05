@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
-# Start opencode in interactive CLI mode for a specific agent.
-# Useful for debugging agent prompts and tools directly.
+# Start openagents runtime with Bun inspector for IDE debugging.
 #
 # Usage:
-#   ./scripts/agent-debug.sh <agent_name> [--env dev|prod]
+#   ./scripts/agent-debug.sh <agent_name> [--env dev|prod] [--port 4096]
 #
 # Examples:
 #   ./scripts/agent-debug.sh demo-assistant
@@ -14,19 +13,20 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-AGENT_NAME="${1:?Usage: $0 <agent_name> [--env dev|prod]}"
+AGENT_NAME="${1:?Usage: $0 <agent_name> [--env dev|prod] [--port 4096]}"
 shift
 ENV="dev"
+PORT="4096"
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
     --env) ENV="$2"; shift 2 ;;
+    --port) PORT="$2"; shift 2 ;;
     *) echo "Unknown flag: $1"; exit 1 ;;
   esac
 done
 
 AGENT_DIR="$ROOT_DIR/agents/$ENV/$AGENT_NAME"
-PLUGIN_DIR="$ROOT_DIR/plugins/openagent-plugin/src"
 
 if [[ ! -d "$AGENT_DIR" ]]; then
   echo "Error: Agent directory not found: $AGENT_DIR"
@@ -42,19 +42,14 @@ elif [[ -f "$ROOT_DIR/.env.example" ]]; then
   set -a; source "$ROOT_DIR/.env.example"; set +a
 fi
 
-# Ensure plugins symlink inside .opencode/
-AGENT_PLUGINS_DIR="$AGENT_DIR/.opencode/plugins"
-mkdir -p "$AGENT_DIR/.opencode"
-if [[ ! -L "$AGENT_PLUGINS_DIR" ]]; then
-  rm -rf "$AGENT_PLUGINS_DIR"
-  ln -sf "$PLUGIN_DIR" "$AGENT_PLUGINS_DIR"
-fi
-
 export OPENAGENT_NAME="$AGENT_NAME"
+export OPENAGENT_PORT="$PORT"
+export OPENCODE_CLIENT=sdk
 
-echo "Starting interactive debug session for agent: $AGENT_NAME ($ENV)"
+echo "Starting debug session for agent: $AGENT_NAME ($ENV)"
 echo "Directory: $AGENT_DIR"
+echo "Bun inspector will be available at ws://localhost:6499/..."
 echo ""
 
 cd "$AGENT_DIR"
-exec opencode
+exec bun --inspect run "$ROOT_DIR/runtime/src/index.ts"

@@ -144,17 +144,5 @@ func (h *Handler) createAgentFileSystem(agent *model.Agent) error {
 		return err
 	}
 
-	// Create .opencode/plugins/ symlink for opencode auto-discovery
-	// opencode scans .opencode/{plugin,plugins}/*.{ts,js}
-	pluginSrc := os.Getenv("OPENAGENT_PLUGIN_PATH")
-	if pluginSrc == "" {
-		pluginSrc = filepath.Join(h.opencodeProxy.AgentsRoot(), "..", "plugins", "openagent-plugin", "src")
-	}
-	pluginSrc, _ = filepath.Abs(pluginSrc)
-	pluginLink := filepath.Join(agentDir, ".opencode", "plugins")
-	if _, err := os.Lstat(pluginLink); err != nil {
-		os.Symlink(pluginSrc, pluginLink)
-	}
-
 	return nil
 }
