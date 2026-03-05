@@ -21,6 +21,12 @@ export namespace Plugin {
   // Built-in plugins that are directly imported (not installed from npm)
   const INTERNAL_PLUGINS: PluginInstance[] = [CodexAuthPlugin, CopilotAuthPlugin, GitlabAuthPlugin]
 
+  const REGISTERED_PLUGINS: PluginInstance[] = []
+
+  export function register(plugin: PluginInstance) {
+    REGISTERED_PLUGINS.push(plugin)
+  }
+
   const state = Instance.state(async () => {
     const client = createOpencodeClient({
       baseUrl: "http://localhost:4096",
@@ -39,7 +45,7 @@ export namespace Plugin {
       $: Bun.$,
     }
 
-    for (const plugin of INTERNAL_PLUGINS) {
+    for (const plugin of [...INTERNAL_PLUGINS, ...REGISTERED_PLUGINS]) {
       log.info("loading internal plugin", { name: plugin.name })
       const init = await plugin(input).catch((err) => {
         log.error("failed to load internal plugin", { name: plugin.name, error: err })
