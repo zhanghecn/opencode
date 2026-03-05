@@ -52,4 +52,4 @@ echo "Bun inspector will be available at ws://localhost:6499/..."
 echo ""
 
 cd "$AGENT_DIR"
-exec bun --inspect run "$ROOT_DIR/runtime/src/index.ts"
+exec bun --inspect=ws://localhost:6499/ run "$ROOT_DIR/runtime/src/index.ts"

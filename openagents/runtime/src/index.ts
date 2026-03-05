@@ -18,6 +18,17 @@ await Log.init({
   level: "INFO",
 })
 
+// Log environment configuration
+console.log("[OpenAgents Runtime] Environment Configuration:")
+console.log(`  OPENAGENT_PORT: ${process.env.OPENAGENT_PORT || "4096 (default)"}`)
+console.log(`  OPENAGENT_HOST: ${process.env.OPENAGENT_HOST || "127.0.0.1 (default)"}`)
+console.log(`  OPENAGENT_NAME: ${process.env.OPENAGENT_NAME || "not set"}`)
+console.log(`  OPENAGENT_TRACING: ${process.env.OPENAGENT_TRACING || "true (default)"}`)
+console.log(`  OPENAGENT_TRACE_OUTPUT: ${process.env.OPENAGENT_TRACE_OUTPUT || "stdout (default)"}`)
+console.log(`  OPENAGENT_MAX_SUBAGENTS: ${process.env.OPENAGENT_MAX_SUBAGENTS || "5 (default)"}`)
+console.log(`  OPENAGENT_SANDBOX_MODE: ${process.env.OPENAGENT_SANDBOX_MODE || "local (default)"}`)
+console.log(`  OPENCODE_SERVER_PASSWORD: ${process.env.OPENCODE_SERVER_PASSWORD ? "set" : "not set"}`)
+
 // Register plugins BEFORE any request triggers Plugin.init()
 Plugin.register(openagentPlugin)
 
@@ -26,7 +37,7 @@ const port = parseInt(process.env.OPENAGENT_PORT || process.env.OPENCODE_PORT ||
 const hostname = process.env.OPENAGENT_HOST || "127.0.0.1"
 
 if (!Flag.OPENCODE_SERVER_PASSWORD) {
-  console.log("Warning: OPENCODE_SERVER_PASSWORD is not set; server is unsecured.")
+  console.log("[OpenAgents Runtime] Warning: OPENCODE_SERVER_PASSWORD is not set; server is unsecured.")
 }
 
 // Start server

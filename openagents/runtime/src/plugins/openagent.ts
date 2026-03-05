@@ -19,6 +19,10 @@ export const openagentPlugin: Plugin = async (input) => {
   const maxSubagents = parseInt(process.env.OPENAGENT_MAX_SUBAGENTS || "5", 10)
   const tracingEnabled = process.env.OPENAGENT_TRACING !== "false"
 
+  console.log(
+    `[OpenAgent Plugin] Initializing with sandboxMode=${sandboxMode}, maxSubagents=${maxSubagents}, tracingEnabled=${tracingEnabled}`,
+  )
+
   let activeSubagents = 0
 
   // Create tracing hooks if enabled
@@ -27,21 +31,22 @@ export const openagentPlugin: Plugin = async (input) => {
   const hooks: Hooks = {
     // Combined event hook: memory + tracing
     event: async (eventInput) => {
+      console.log(`[OpenAgent Plugin] Event received: ${eventInput.event.type}`)
       await memoryHooks.event?.(eventInput)
       await tracing?.event?.(eventInput)
     },
 
     // Combined chat.message hook: uploads + tracing
     "chat.message": async (input, output) => {
+      console.log(`[OpenAgent Plugin] Processing chat message, session: ${input.sessionID}`)
       // Uploads middleware equivalent
       const uploadedFiles = process.env.OPENAGENT_UPLOADED_FILES
       if (uploadedFiles) {
         const fileList = JSON.parse(uploadedFiles)
+        console.log(`[OpenAgent Plugin] Found ${fileList.length} uploaded files`)
         if (fileList.length > 0) {
           const filesXml = fileList
-            .map((f: { name: string; path: string; size: string }) =>
-              `- ${f.name} (${f.size})\n  Path: ${f.path}`
-            )
+            .map((f: { name: string; path: string; size: string }) => `- ${f.name} (${f.size})\n  Path: ${f.path}`)
             .join("\n")
           output.parts.push({
             type: "text",
@@ -56,11 +61,15 @@ export const openagentPlugin: Plugin = async (input) => {
 
     // Combined tool.execute.before: subagent limit + tracing
     "tool.execute.before": async (input, output) => {
+      console.log(`[OpenAgent Plugin] Executing tool: ${input.tool}`)
       if (input.tool === "task") {
         if (activeSubagents >= maxSubagents) {
-          throw new Error(`Maximum concurrent subagents (${maxSubagents}) reached. Wait for existing tasks to complete.`)
+          throw new Error(
+            `Maximum concurrent subagents (${maxSubagents}) reached. Wait for existing tasks to complete.`,
+          )
         }
         activeSubagents++
+        console.log(`[OpenAgent Plugin] Subagent started. Active: ${activeSubagents}/${maxSubagents}`)
       }
       await tracing?.["tool.execute.before"]?.(input, output)
     },
@@ -69,14 +78,17 @@ export const openagentPlugin: Plugin = async (input) => {
     "tool.execute.after": async (input, output) => {
       if (input.tool === "task") {
         activeSubagents = Math.max(0, activeSubagents - 1)
+        console.log(`[OpenAgent Plugin] Subagent completed. Active: ${activeSubagents}/${maxSubagents}`)
       }
+      console.log(`[OpenAgent Plugin] Tool ${input.tool} execution completed`)
       await tracing?.["tool.execute.after"]?.(input, output)
     },
 
     // Register custom tools
     tool: {
       ask_clarification: tool({
-        description: "Ask the user a clarifying question when the request is ambiguous. Use this instead of making assumptions.",
+        description:
+          "Ask the user a clarifying question when the request is ambiguous. Use this instead of making assumptions.",
         args: {
           question: tool.schema.string().describe("The question to ask the user"),
           options: tool.schema.array(tool.schema.string()).optional().describe("Optional list of suggested answers"),
@@ -108,11 +120,15 @@ export const openagentPlugin: Plugin = async (input) => {
       present_files: tool({
         description: "Present generated files (HTML, documents, code) to the user as downloadable artifacts.",
         args: {
-          files: tool.schema.array(tool.schema.object({
-            path: tool.schema.string().describe("File path"),
-            type: tool.schema.string().describe("MIME type"),
-            description: tool.schema.string().optional().describe("Description of the file"),
-          })).describe("List of files to present"),
+          files: tool.schema
+            .array(
+              tool.schema.object({
+                path: tool.schema.string().describe("File path"),
+                type: tool.schema.string().describe("MIME type"),
+                description: tool.schema.string().optional().describe("Description of the file"),
+              }),
+            )
+            .describe("List of files to present"),
         },
         async execute(args) {
           return JSON.stringify({
