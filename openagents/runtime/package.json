@@ -1,0 +1,19 @@
+{
+  "name": "@openagents/runtime",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "bun --watch run src/index.ts",
+    "debug": "bun --inspect run src/index.ts",
+    "start": "bun run src/index.ts"
+  },
+  "dependencies": {
+    "opencode": "workspace:*",
+    "@opencode-ai/plugin": "workspace:*",
+    "@opencode-ai/sdk": "workspace:*",
+    "@opencode-ai/util": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/bun": "catalog:"
+  }
+}

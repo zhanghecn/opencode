@@ -1,0 +1,6 @@
+DROP TABLE IF EXISTS usage_records;
+DROP TABLE IF EXISTS thread_mappings;
+DROP TABLE IF EXISTS api_tokens;
+DROP TABLE IF EXISTS agent_skills;
+DROP TABLE IF EXISTS agents;
+DROP TABLE IF EXISTS users;

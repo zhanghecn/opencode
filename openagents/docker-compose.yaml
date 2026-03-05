@@ -1,0 +1,41 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: openagents
+      POSTGRES_PASSWORD: openagents
+      POSTGRES_DB: openagents
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U openagents"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  gateway:
+    build:
+      context: ./gateway
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      PORT: "8080"
+      DB_HOST: postgres
+      DB_PORT: "5432"
+      DB_USER: openagents
+      DB_PASSWORD: openagents
+      DB_NAME: openagents
+      JWT_SECRET: "${JWT_SECRET:-change-me-in-production}"
+      OPENCODE_URL: "http://host.docker.internal:4096"
+      AGENTS_ROOT: /data/agents
+    volumes:
+      - ./agents:/data/agents
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+volumes:
+  pgdata:
