@@ -100,7 +100,7 @@ export namespace ToolRegistry {
     const config = await Config.get()
     const question = ["app", "cli", "desktop"].includes(Flag.OPENCODE_CLIENT) || Flag.OPENCODE_ENABLE_QUESTION_TOOL
 
-    return [
+    const builtins: Tool.Info[] = [
       InvalidTool,
       ...(question ? [QuestionTool] : []),
       BashTool,
@@ -120,8 +120,12 @@ export namespace ToolRegistry {
       ...(Flag.OPENCODE_EXPERIMENTAL_LSP_TOOL ? [LspTool] : []),
       ...(config.experimental?.batch_tool === true ? [BatchTool] : []),
       ...(Flag.OPENCODE_EXPERIMENTAL_PLAN_MODE && Flag.OPENCODE_CLIENT === "cli" ? [PlanExitTool] : []),
-      ...custom,
     ]
+
+    // Plugin-registered tools with the same id override builtins
+    const customIds = new Set(custom.map((t) => t.id))
+    const filtered = builtins.filter((t) => !customIds.has(t.id))
+    return [...filtered, ...custom]
   }
 
   export async function ids() {

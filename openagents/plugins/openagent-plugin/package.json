@@ -1,0 +1,11 @@
+{
+  "name": "openagent-plugin",
+  "version": "0.1.0",
+  "description": "OpenAgents plugin for opencode - provides middleware equivalents and sandbox routing",
+  "main": "src/index.ts",
+  "type": "module",
+  "dependencies": {
+    "@opencode-ai/plugin": "workspace:*",
+    "@opencode-ai/sdk": "workspace:*"
+  }
+}
