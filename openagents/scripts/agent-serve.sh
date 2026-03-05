@@ -1,66 +1,112 @@
 #!/usr/bin/env bash
-# Start openagents runtime for a specific agent.
+# 启动特定 Agent 的 OpenAgents 运行时服务
 #
-# Usage:
+# 使用方法:
 #   ./scripts/agent-serve.sh <agent_name> [--env dev|prod] [--port 4096]
 #
-# Examples:
-#   ./scripts/agent-serve.sh demo-assistant
-#   ./scripts/agent-serve.sh researcher --env prod --port 4097
+# 示例:
+#   ./scripts/agent-serve.sh demo-assistant          # 启动 demo-assistant agent，使用默认 dev 环境和 4096 端口
+#   ./scripts/agent-serve.sh researcher --env prod --port 4097  # 使用 prod 环境和 4097 端口
 
+# set -euo pipefail 是 Bash 的严格模式设置：
+# -e: 任何命令返回非零退出码时立即退出脚本
+# -u: 使用未定义变量时报错
+# -o pipefail: 管道中任意命令失败，整个管道返回失败状态
 set -euo pipefail
 
+# 获取脚本所在目录的绝对路径
+# $(dirname "$0") 获取脚本所在目录
+# cd 进入该目录，然后 pwd 打印当前工作目录（绝对路径）
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+
+# 获取项目根目录（脚本目录的上一级）
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-# Defaults
+# ========== 参数默认值设置 ==========
+
+# ${1:?...} 是 Bash 的参数扩展语法：
+# - 如果 $1（第一个参数）未定义或为空，则显示错误信息并退出
+# - 要求必须提供 agent 名称作为第一个参数
 AGENT_NAME="${1:?Usage: $0 <agent_name> [--env dev|prod] [--port 4096]}"
+
+# shift 命令将位置参数左移一位，$2 变成 $1，以此类推
+# 这样处理后，剩余的参数可以从 $1 开始处理
 shift
+
+# 设置默认值：环境为 dev，端口为 4096
 ENV="dev"
 PORT="4096"
 
-# Parse flags
+# ========== 解析命令行参数 ==========
+
+# while 循环解析可选参数
+# $# 表示参数个数，当还有参数时继续循环
 while [[ $# -gt 0 ]]; do
   case "$1" in
+    # --env 参数：指定环境（dev 或 prod）
+    # shift 2 表示跳过当前参数和它的值
     --env) ENV="$2"; shift 2 ;;
+    # --port 参数：指定服务端口
     --port) PORT="$2"; shift 2 ;;
+    # 未知参数：显示错误并退出
     *) echo "Unknown flag: $1"; exit 1 ;;
   esac
 done
 
+# 构建 Agent 目录路径：agents/{环境}/{Agent名称}
 AGENT_DIR="$ROOT_DIR/agents/$ENV/$AGENT_NAME"
 
+# 检查 Agent 目录是否存在
+# -d 测试是否是目录
 if [[ ! -d "$AGENT_DIR" ]]; then
   echo "Error: Agent directory not found: $AGENT_DIR"
   echo "Available agents:"
+  # ls -1 每行显示一个文件/目录
+  # 2>/dev/null 将错误输出重定向到空设备（不显示错误）
+  # || echo "  (none)" 如果 ls 失败（目录不存在），显示 (none)
   ls -1 "$ROOT_DIR/agents/$ENV/" 2>/dev/null || echo "  (none)"
   exit 1
 fi
 
-# Load environment variables from .env or .env.example
+# ========== 导出运行时环境变量 ==========
+
+# export 将变量导出为环境变量，供子进程使用
+export OPENAGENT_NAME="$AGENT_NAME"      # Agent 名称
+export OPENAGENT_PORT="$PORT"            # 服务端口
+export OPENCODE_CLIENT=sdk               # 设置为 SDK 模式（禁用交互式问题工具）
+
+# 确定要加载的 env 文件路径（使用绝对路径）
+ENV_FILE=""
 if [[ -f "$ROOT_DIR/.env" ]]; then
-  echo "Loading $ROOT_DIR/.env"
-  set -a; source "$ROOT_DIR/.env"; set +a
+  ENV_FILE="$ROOT_DIR/.env"
 elif [[ -f "$ROOT_DIR/.env.example" ]]; then
-  echo "Loading $ROOT_DIR/.env.example"
-  set -a; source "$ROOT_DIR/.env.example"; set +a
+  ENV_FILE="$ROOT_DIR/.env.example"
 fi
 
-# Export runtime environment
-export OPENAGENT_NAME="$AGENT_NAME"
-export OPENAGENT_PORT="$PORT"
-export OPENCODE_CLIENT=sdk
+# ========== 显示启动信息 ==========
 
 echo ""
 echo "========================================"
-echo " Agent:   $AGENT_NAME"
-echo " Env:     $ENV"
-echo " Dir:     $AGENT_DIR"
-echo " Port:    $PORT"
-echo " Model:   ${ANTHROPIC_MODEL:-kimi-k2.5}"
-echo " BaseURL: ${ANTHROPIC_BASE_URL:-not set}"
+echo " Agent:   $AGENT_NAME"                  # Agent 名称
+echo " Env:     $ENV"                          # 环境（dev/prod）
+echo " Dir:     $AGENT_DIR"                    # Agent 目录路径
+echo " Port:    $PORT"                         # 服务端口号
+echo " Model:   ${ANTHROPIC_MODEL:-kimi-k2.5}" # AI 模型，默认 kimi-k2.5
+echo " BaseURL: ${ANTHROPIC_BASE_URL:-not set}" # API 基础地址
 echo "========================================"
 echo ""
 
+# ========== 启动服务 ==========
+
+# 切换到 Agent 目录
+# Agent 可能依赖该目录下的配置文件
 cd "$AGENT_DIR"
-exec bun run "$ROOT_DIR/runtime/src/index.ts"
+
+# exec 命令用新进程替换当前进程（不创建子进程）
+# bun --env-file 使用绝对路径加载环境变量文件
+# bun run 运行 TypeScript 文件
+if [[ -n "$ENV_FILE" ]]; then
+  exec bun --env-file="$ENV_FILE" run "$ROOT_DIR/runtime/src/index.ts"
+else
+  exec bun run "$ROOT_DIR/runtime/src/index.ts"
+fi

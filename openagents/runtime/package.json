@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "bun --inspect=ws://localhost:6499/ run src/index.ts",
-    "debug": "bun --inspect=ws://localhost:6499/  run src/index.ts",
+    "debug": "bun --inspect=ws://localhost:6499/ run src/index.ts",
     "start": "bun run src/index.ts"
   },
   "dependencies": {
