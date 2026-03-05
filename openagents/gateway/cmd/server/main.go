@@ -27,11 +27,10 @@ func main() {
 
 	agentsRoot := getEnv("AGENTS_ROOT", "/data/agents")
 	opencodePort, _ := strconv.Atoi(getEnv("OPENCODE_PORT", "4096"))
-	pluginPath := getEnv("OPENAGENT_PLUGIN_PATH", "")
 
 	// Start opencode serve if OPENCODE_MANAGED=true
 	if getEnv("OPENCODE_MANAGED", "false") == "true" {
-		mgr := proxy.NewOpencodeManager(opencodePort, agentsRoot, pluginPath)
+		mgr := proxy.NewOpencodeManager(opencodePort, agentsRoot)
 		if err := mgr.Start(ctx); err != nil {
 			log.Fatalf("failed to start opencode: %v", err)
 		}

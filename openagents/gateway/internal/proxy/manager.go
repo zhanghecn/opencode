@@ -15,47 +15,50 @@ type OpencodeManager struct {
 	cmd        *exec.Cmd
 	port       int
 	agentsRoot string
-	pluginPath string
 }
 
-func NewOpencodeManager(port int, agentsRoot, pluginPath string) *OpencodeManager {
+func NewOpencodeManager(port int, agentsRoot string) *OpencodeManager {
 	return &OpencodeManager{
 		port:       port,
 		agentsRoot: agentsRoot,
-		pluginPath: pluginPath,
 	}
 }
 
-// Start spawns the opencode serve process with full permissions
+// Start spawns the runtime process
 func (m *OpencodeManager) Start(ctx context.Context) error {
-	opencodeBin := os.Getenv("OPENCODE_BIN")
-	if opencodeBin == "" {
-		opencodeBin = "opencode"
+	runtimeBin := os.Getenv("RUNTIME_BIN")
+	if runtimeBin == "" {
+		runtimeBin = "bun"
+	}
+	runtimeEntry := os.Getenv("RUNTIME_ENTRY")
+	if runtimeEntry == "" {
+		runtimeEntry = "../runtime/src/index.ts"
 	}
 
-	m.cmd = exec.CommandContext(ctx, opencodeBin, "serve", "--port", fmt.Sprintf("%d", m.port))
+	m.cmd = exec.CommandContext(ctx, runtimeBin, "run", runtimeEntry)
 
-	// Full permission config injected via environment
+	// Config still injected via OPENCODE_CONFIG_CONTENT for provider/model settings
 	configContent := m.buildConfig()
 	configJSON, _ := json.Marshal(configContent)
 
 	m.cmd.Env = append(os.Environ(),
 		fmt.Sprintf("OPENCODE_CONFIG_CONTENT=%s", string(configJSON)),
 		"OPENCODE_CLIENT=sdk",
+		fmt.Sprintf("OPENAGENT_PORT=%d", m.port),
 	)
 
 	m.cmd.Stdout = os.Stdout
 	m.cmd.Stderr = os.Stderr
 
 	if err := m.cmd.Start(); err != nil {
-		return fmt.Errorf("failed to start opencode: %w", err)
+		return fmt.Errorf("failed to start runtime: %w", err)
 	}
 
-	log.Printf("opencode serve started on port %d (pid=%d)", m.port, m.cmd.Process.Pid)
+	log.Printf("openagents runtime started on port %d (pid=%d)", m.port, m.cmd.Process.Pid)
 
 	// Wait for readiness
 	if err := m.waitReady(ctx); err != nil {
-		return fmt.Errorf("opencode not ready: %w", err)
+		return fmt.Errorf("runtime not ready: %w", err)
 	}
 
 	return nil
@@ -80,13 +83,6 @@ func (m *OpencodeManager) buildConfig() map[string]interface{} {
 				"*": "allow",
 			},
 		},
-	}
-
-	// Add plugin if path is specified
-	if m.pluginPath != "" {
-		config["plugin"] = []string{
-			fmt.Sprintf("file://%s", m.pluginPath),
-		}
 	}
 
 	// Inject provider config from environment if available
